@@ -1,0 +1,17 @@
+<!ELEMENT message (data, filter)>
+
+<!ELEMENT data (callback?, signal, urgency, body)>
+	<!ELEMENT body (#PCDATA)>
+	<!ELEMENT urgency (#PCDATA)>
+	<!ELEMENT signal (#PCDATA)>
+	<!ELEMENT callback (#PCDATA)>
+
+<!ELEMENT filter (role, room, max-delay)>
+	<!ATTLIST filter timetamp CDATA #REQUIRED>
+	<!ELEMENT role (#PCDATA)>
+	<!ELEMENT room (#PCDATA)>
+	<!ELEMENT max-delay (#PCDATA)>
+
+
+
+
