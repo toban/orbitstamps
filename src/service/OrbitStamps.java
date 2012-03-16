@@ -11,7 +11,7 @@ import org.mortbay.jetty.servlet.Context;
 
 public class OrbitStamps
 {
-	static private JettyServer server;
+	static private WebServer server;
 	static public DatabasePoll poller;
 	public static boolean LOG_TO_FILE = false;
 	static private FileWriter fs;
@@ -59,13 +59,20 @@ public class OrbitStamps
 		//poller.start();
 		
 		// INIT INTERFACE
-		server = new JettyServer();
+		server = new WebServer();
 		server.init(8080);
 		
 	}
+	public static void testMessage()
+	{
+		//Test Message
+		AscomPagerMessageChannel channel = new AscomPagerMessageChannel();
+		PagerReciever pager = new PagerReciever("7491");
+		Message msg = new Message("hello world", Urgency.LEVEL_IMPORTANT, pager, Message.MESSAGE_BEEP_SIGNAL);
+		channel.sendMessage(msg);
+	}
 	public static void log(int type, String s)
 	{
-		
 		if(LOG_TO_FILE)
 		{
 			try
