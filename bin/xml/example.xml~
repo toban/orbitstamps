@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!DOCTYPE party SYSTEM "message.dtd">
+<!DOCTYPE party SYSTEM "schema/message.dtd">
 <message>
 	<data>
 		<callback></callback>
@@ -9,7 +9,8 @@
 	</data>
 	<filter timestamp="10">
 		<role>doctorman</role>
+		<role>snakeman</role>
 		<room>1</room>
-		<max-delay></max-delay>
+		<max-delay>10</max-delay>
 	</filter>
 </message>

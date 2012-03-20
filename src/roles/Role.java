@@ -1,8 +1,12 @@
 package roles;
 
-public abstract class Role 
+public class Role 
 {
-	public static final int ROLE_AN_DOCTOR = 1;
-	protected int roleID;
-	public int getRole() {return roleID;};
+	public static final String ROLE_AN_DOCTOR = "Lakare";
+	public String roleID;
+	public Role(String roleID)
+	{
+		this.roleID = roleID;
+	}
+	public String getRole() {return roleID;};
 }

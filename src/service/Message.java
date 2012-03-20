@@ -26,13 +26,11 @@ public class Message
 	private int urgency;
 	private String callback;
 	private int signal;
-	public MessageReciever reciever;
 	
-	public Message(String body, int urgency, MessageReciever reciever, int signal)
+	public Message(String body, int urgency, int signal)
 	{
 		this.body = body;
 		this.urgency = urgency;
-		this.reciever = reciever;
 		this.signal = signal;
 	}
 	public int getSignal()

@@ -19,9 +19,9 @@ public class AscomPagerMessageChannel implements MessageChannel {
 		formURL = "http://10.48.64.26/cgi-bin/npcgi";
 	}
 	@Override
-	public boolean sendMessage(Message msg)
+	public boolean sendMessage(Message msg, MessageReciever recv)
 	{
-		OrbitStamps.log(OrbitStamps.LOG_NOTICE, "Sending message to " + msg.reciever.number);
+		OrbitStamps.log(OrbitStamps.LOG_NOTICE, "Sending message to " + recv.number);
 		try{
 		
 			String charset = "UTF-8";
@@ -29,18 +29,20 @@ public class AscomPagerMessageChannel implements MessageChannel {
 			// setup query
 			String query = String.format("pri=7&bp=%s&url=&ack=0&no=%s&msg=%s",
 									 URLEncoder.encode(Integer.toString(msg.getSignal()), charset),
-									 URLEncoder.encode(msg.reciever.number.toString(), charset), 
+									 URLEncoder.encode(recv.number.toString(), charset), 
 									 URLEncoder.encode(msg.getMessage(), charset));
 			
 			URL url = new URL(formURL+"?"+query);
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			HttpURLConnection conn = null;
+			HttpURLConnection.setFollowRedirects(false);
+			conn = (HttpURLConnection) url.openConnection();
 			
-			conn.setRequestMethod("GET");
+		
 			
 			//System.out.println(url.toString());
-			//conn.connect();
+			conn.connect();
 			Map<String,List<String>> map = conn.getHeaderFields();
-			//conn.disconnect();
+			conn.disconnect();
 			
 			
 			
