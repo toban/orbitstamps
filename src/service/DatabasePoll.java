@@ -1,5 +1,9 @@
 package service;
 
+import java.util.ArrayList;
+
+import timestamps.Timestamp;
+
 public class DatabasePoll extends Thread
 {
 	public String serverIP;
@@ -7,6 +11,7 @@ public class DatabasePoll extends Thread
 	public String password;
 	public boolean isActive = false;
 	public long pollInterval = 1000;
+	static public ArrayList<Timestamp> newTimestamps;
 	
 	public DatabasePoll(String ip, String usr, String pass)
 	{

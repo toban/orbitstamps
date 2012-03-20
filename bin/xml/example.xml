@@ -8,8 +8,7 @@
 		<body>Nu är saxen i laxen!</body>
 	</data>
 	<filter timestamp="10">
-		<role>doctorman</role>
-		<role>snakeman</role>
+		<role>Ssk ane</role>
 		<room>1</room>
 		<max-delay>10</max-delay>
 	</filter>

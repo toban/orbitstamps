@@ -11,10 +11,10 @@ public class FilterMessage
 	public ArrayList<Role> roles;
 	public Timestamp stamp;
 	public int maxDelay;
-	public ArrayList<Integer> rooms;
+	public ArrayList<String> rooms;
 	public Message msg;
 	
-	public FilterMessage(ArrayList<Role> roles, Timestamp stamp, int maxDelay, ArrayList<Integer> rooms, Message msg)
+	public FilterMessage(ArrayList<Role> roles, Timestamp stamp, int maxDelay, ArrayList<String> rooms, Message msg)
 	{
 		this.roles = roles;
 		this.stamp = stamp;
@@ -23,14 +23,30 @@ public class FilterMessage
 		this.msg = msg;
 		
 	}
+	// check if the room's timestamp and role matches 
+	public boolean match(Room r, Person p)
+	{
+		if(r.newStamps.contains(stamp))
+		{
+			if(rooms.contains("all") || rooms.contains(r.roomID))
+			{
+				for(Role filterRole : roles)
+				{
+					if(p.role.equals(filterRole))
+						return true;
+				}
+			}
+		}
+		return false;
+	}
 	public void printDebug()
 	{
 		OrbitStamps.log(OrbitStamps.LOG_NOTICE, "FilterMessage: DEBUG PRINT START");
 		for(Role r : roles)
 		{
-			OrbitStamps.log(OrbitStamps.LOG_NOTICE, "role= " + r.roleID);
+			OrbitStamps.log(OrbitStamps.LOG_NOTICE, "role= " + r.getRole());
 		}
-		for(Integer r : rooms)
+		for(String r : rooms)
 		{
 			OrbitStamps.log(OrbitStamps.LOG_NOTICE, "room= " + r);
 		}

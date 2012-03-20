@@ -4,13 +4,11 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.mortbay.jetty.Server;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -63,7 +61,7 @@ public class FilterManager
 	public FilterMessage parseDom(Document dom)
 	{
 		int maxDelay = 0;
-		ArrayList<Integer> rooms = new ArrayList<Integer>(); 
+		ArrayList<String> rooms = new ArrayList<String>(); 
 		ArrayList<Role> roles = new ArrayList<Role>();
 		Timestamp stamp = null;
 		String body,callback;
@@ -105,16 +103,9 @@ public class FilterManager
 				// get the rooms
 				for(String s : getElementStringArray(filterElement, "room"))
 				{
-					try
-					{
-						int x = Integer.parseInt(s);
-						rooms.add(x);
-					}
-					catch(Exception e)
-					{
-						OrbitStamps.log(OrbitStamps.LOG_ERROR, "FilterManager: Error while parsing room value ... ");
-					}
+					rooms.add(s);
 				}
+				
 				// get the roles
 				for(String s : getElementStringArray(filterElement, "role"))
 				{
