@@ -8,8 +8,9 @@
                 <attribute name="Main-Class" value="service.OrbitStamps"/>
                 <attribute name="Class-Path" value="."/>
             </manifest>
-            <fileset dir="/home/tobias/skolarbete/EXJOBB2012/orbitstamps/bin">
-        	</fileset>
+            <fileset dir="/home/tobias/skolarbete/EXJOBB2012/orbitstamps/bin"></fileset>
+			<fileset dir="/home/tobias/skolarbete/EXJOBB2012/orbitstamps/src/web"></fileset>
+			<fileset dir="/home/tobias/skolarbete/EXJOBB2012/orbitstamps/src/filters"></fileset>
             <zipfileset excludes="META-INF/*.SF" src="/home/tobias/skolarbete/EXJOBB2012/orbitstamps/libs/jetty-6.1.26.jar"/>
             <zipfileset excludes="META-INF/*.SF" src="/home/tobias/skolarbete/EXJOBB2012/orbitstamps/libs/jetty-util-6.1.26.jar"/>
             <zipfileset excludes="META-INF/*.SF" src="/home/tobias/skolarbete/EXJOBB2012/orbitstamps/libs/servlet-api-2.5-20081211.jar"/>

@@ -9,12 +9,12 @@ public class Room
 	public String roomID;
 	private ArrayList<Person> people;
 	public ArrayList<Timestamp> newStamps;
-	public ArrayList<Timestamp> oldStamps;
+	public ArrayList<CommunicationHistory> messageHistory;
 	
 	public Room(String roomID)
 	{
 		this.newStamps = new ArrayList<Timestamp>();
-		this.oldStamps = new ArrayList<Timestamp>();
+		this.messageHistory = new ArrayList<CommunicationHistory>();
 		this.setPeople(new ArrayList<Person>());
 		this.roomID = roomID;
 	}

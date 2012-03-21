@@ -20,6 +20,7 @@ import timestamps.Timestamp;
 
 public class OrbitStamps
 {
+	
 	static private WebServer server;
 	static public DatabasePoll poller;
 	
@@ -31,7 +32,7 @@ public class OrbitStamps
 	static public FilterManager filterManager;
 	static public HashMap<String,Room> operatingRooms;
 	
-	public static final String DIR_XML_FILTERS = "xml";
+	public static final String DIR_XML_FILTERS = "filters/xml";
 	static public final int LOG_ERROR = 0;
 	static public final int LOG_NOTICE = 0;
 	
@@ -76,10 +77,6 @@ public class OrbitStamps
 		poller = new DatabasePoll("ip", "usr", "pass");
 		//poller.start();
 		
-		// INIT INTERFACE
-		//server = new WebServer();
-		//server.init(8080);
-		
 		
 		// Read filters
 		filterManager = new FilterManager();
@@ -96,11 +93,15 @@ public class OrbitStamps
 		createDummyData();
 		processTimestamps();
 		
+		// INIT INTERFACE
+		server = new WebServer();
+		server.init(8080);
+		
 		
 	}
 	public static void createDummyData()
 	{
-		int numppl = 100;
+		int numppl = 10;
 		int numRooms = 10;
 		int numStamps = 300;
 		
@@ -151,6 +152,12 @@ public class OrbitStamps
 							// if the room, person, and timestamp is ok, its a match
 							if(fm.match(room, person))
 							{
+								// TODO: should go through some interface ...
+								room.messageHistory.add(new CommunicationHistory(fm.msg, 
+																			person.devices.iterator().next(),
+																			CommunicationHistory.HISTORY_TYPE_AUTO,
+																			person.ID));
+								
 								log(OrbitStamps.LOG_NOTICE, "!!! Match found " + person.name + " role= " + person.role.getRole() + " room= " + room.roomID);
 							}
 							else
@@ -162,7 +169,6 @@ public class OrbitStamps
 				}
 				
 				// move all the processed stuff to history.
-				room.oldStamps.addAll(room.newStamps);
 				room.newStamps.clear();
 			}
 			

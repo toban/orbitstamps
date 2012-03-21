@@ -12,7 +12,7 @@ public class WebServer {
 	 public void init(int port)
 	 {
 		 
-		 final String WEBAPPDIR = "www";
+		 final String WEBAPPDIR = "web/www";
 		 
 		 final Server server = new Server(port);
 		  
