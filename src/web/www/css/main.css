@@ -110,6 +110,7 @@ body
 	width: auto;
 	vertical-align: top;
 }
+/* ROLE TYPE */
 .Usk-op
 {
 	border-right: 10px solid #99FF66;
@@ -122,6 +123,23 @@ body
 {
 	border-right:10px solid #9966FF;
 }
+/* ROLE END */
+#create-message-container
+{
+	display: none;
+	margin: 10px;
+	width: inherit;
+	background: #CCC;
+	padding-top: 10px;
+	padding-left: 10px;
+	padding-bottom: 10px;
+}
+h3
+{
+	margin:0;
+	padding: 0;
+	
+}
 h1
 {
 	margin: 0;
@@ -131,6 +149,7 @@ h1
 {
 	font-size: 10px;
 	margin-left: 20px;
+	font-style: italic;
 	
 }
 h2

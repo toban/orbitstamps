@@ -9,10 +9,11 @@ if(roomID != null && !roomID.isEmpty() && OrbitStamps.operatingRooms.containsKey
 {
 		Room room = OrbitStamps.operatingRooms.get(roomID);
 		%>
+		<div class="table">
 		<div class="header-row">
-		<div class="header">Typ</div>
+		<div class="header">Avsändare</div>
 		<div class="header" style="display:none;">HSAID</div>
-		<div class="header">Nummer</div>
+		<div class="header">Mottagare</div>
 		<div class="header">Meddelande</div>
 		</div>
 	<% 
@@ -27,5 +28,10 @@ if(roomID != null && !roomID.isEmpty() && OrbitStamps.operatingRooms.containsKey
 		</div>
 	<%
 	}
+%></div><%
+}
+else
+{
+	out.print("hittar ingen historik för sal " + roomID);
 }
 	%>
