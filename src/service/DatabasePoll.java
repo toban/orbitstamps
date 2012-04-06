@@ -2,7 +2,6 @@ package service;
 
 import java.util.ArrayList;
 
-import timestamps.Timestamp;
 
 public class DatabasePoll extends Thread
 {
@@ -25,7 +24,9 @@ public class DatabasePoll extends Thread
     	while(isActive)
     	{
         	OrbitStamps.log(OrbitStamps.LOG_NOTICE, "Polling database ... ");
- 
+        	OrbitStamps.log(OrbitStamps.LOG_NOTICE, "Adding new timestamps to room ... ");
+        	OrbitStamps.processRoomTimestamps();
+        	
             synchronized (this) 
             {
            		try 

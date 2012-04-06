@@ -11,14 +11,33 @@ $(document).ready(function()
 		{
 			var createNewMessage = true;
 			var newMsgRecv = new Array();
-			
+			var msgHistory = new Array();
 			/* updating the history */
 			var historyUpdate = function()
 			{
 			$.post("includes/functions/getMsgHistory.jsp", {room: <%= roomID %>},
 					   function(data) 
 					   {
-					     $("#history-table-container").html(data);
+				
+					     
+					     var obj = JSON.parse(data);
+					     
+					     for(var i = 0; i < obj.history.length; i++)
+					    	 {
+					    	 	var item = obj.history[i];
+					    	 	if(msgHistory.indexOf(item.uuid) == -1)
+					    	 		{
+					    	 			msgHistory.push(item.uuid)
+										var htmlItem = $("<div class='row history'><div class='cell'>"+item.time+"</div><div class='cell'>"+item.type+"</div><div class='cell personID' style='display:none;'>"+item.personID+"</div><div class='cell'>"+item.recvNumber+"</div><div class='cell smallText'>"+item.body+"</div><div class='cell'>"+item.status+"</div></div>");
+					    	 			$("#history-table-container .table .header-row").after(htmlItem);
+					    	 			htmlItem.hide();
+					    	 			htmlItem.fadeIn();
+					    	 		}
+					    	 	else
+					    	 		{
+					    	 		
+					    	 		}
+					    	 }
 					     var date = new Date();
 					     var updateString = date.getHours() + ":" + date.getMinutes() +":"+ date.getSeconds();
 					     $("#history-update").text("Senast uppdaterad " + updateString);
@@ -184,7 +203,24 @@ $(document).ready(function()
 				$(this).removeClass("hovering");
 				$("#history div.row").removeClass("hovering");
 			});
+			/* personal pa sal hovering */
+			$("div.row.history").live("mouseover", function()
+			{
+				var pID = $(this).children("div.cell.personID").text();
+				
+				$(this).addClass("hovering");
 			
+				$(".room-container div.cell.personID").each(function()
+				{
+					var that = $(this);
+					if(that.text()==pID)
+						that.parent().addClass("hovering");
+				});
+			});
+			$("div.row.history").live("mouseout",function(){
+				$(this).removeClass("hovering");
+				$(".room-container div.row").removeClass("hovering");
+			});
 			historyUpdate();
 			setInterval(historyUpdate,10000);
 		});
@@ -200,7 +236,7 @@ else
 		Room room = OrbitStamps.operatingRooms.get(roomID);
 		%>
 		<div id="timeline-container">
-		<div class="operation-timeline">
+		<div class="operation-timeline" style="display: none;">
 			<div class="timeline-table">
 			<div class="timeline-row">
 			<div class="timeline-cell" style="background-color: #F0A;"><a title="tidpunkt" href="#">PREOP</a></div>
@@ -283,7 +319,17 @@ else
 		<h2>Meddelande historik</h2><span id="history-update"></span>
 		<div id="history-table-container">
 		<!-- history post start -->
-		
+		<div class="table">
+		<div class="header-row">
+		<div class="header">Tidpunkt</div>
+		<div class="header">Avsändare</div>
+		<div class="header" style="display:none;">HSAID</div>
+		<div class="header">Nummer</div>
+		<div class="header">Meddelande</div>
+		<div class="header">Status</div>
+		</div>
+
+		</div>
 		<!-- history post end -->
 		</div>
 		</div> <!-- end history -->

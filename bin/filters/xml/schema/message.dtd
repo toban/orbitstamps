@@ -1,7 +1,9 @@
 <!ELEMENT message (data, filter)>
 
 <!ELEMENT data (callback?, signal, urgency, body)>
-	<!ELEMENT body (#PCDATA)>
+	<!ELEMENT body (#PCDATA | room-name | patient-iva)*>
+		<!ELEMENT room-name EMPTY>
+		<!ELEMENT patient-iva EMPTY>
 	<!ELEMENT urgency (#PCDATA)>
 	<!ELEMENT signal (#PCDATA)>
 	<!ELEMENT callback (#PCDATA)>

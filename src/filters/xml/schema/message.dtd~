@@ -1,0 +1,19 @@
+<!ELEMENT message (data, filter)>
+
+<!ELEMENT data (callback?, signal, urgency, body)>
+	<!ELEMENT body (#PCDATA | room-name | patient-iva | datetime)*>
+		<!ELEMENT room-name EMPTY>
+		<!ELEMENT patient-iva EMPTY>
+	<!ELEMENT urgency (#PCDATA)>
+	<!ELEMENT signal (#PCDATA)>
+	<!ELEMENT callback (#PCDATA)>
+
+<!ELEMENT filter (role, room, max-delay)>
+	<!ATTLIST filter timestamp CDATA #REQUIRED>
+	<!ELEMENT role (#PCDATA)>
+	<!ELEMENT room (#PCDATA)>
+	<!ELEMENT max-delay (#PCDATA)>
+
+
+
+

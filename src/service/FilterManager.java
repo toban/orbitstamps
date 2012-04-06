@@ -13,9 +13,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 
-import timestamps.Timestamp;
 
 public class FilterManager 
 {
@@ -133,10 +133,10 @@ public class FilterManager
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		
 		// validation
-		//dbf.setValidating(true);
+		dbf.setValidating(true);
 		//dbf.setAttribute("http://java.sun.com/xml/jaxp/properties/schemaLanguage", "http://www.w3.org/2001/XMLSchema");
 		//dbf.setAttribute("http://java.sun.com/xml/jaxp/properties/schemaSource",xmlURL+"/message.dtd");
-
+		
 		OrbitStamps.log(OrbitStamps.LOG_NOTICE, "FilterManager: Reading filters ...");
 		
 		File folder = new File(warUrl.getFile());
@@ -150,14 +150,13 @@ public class FilterManager
 			String ext = fileName.substring(index,fileName.length());
 			if(f.isFile() && ext.equals(".xml"))
 			{
-				
 				try 
 				{
 					Document dom;
 					DocumentBuilder db = dbf.newDocumentBuilder();
 					
 					dom = db.parse(filePath);
-				
+					
 					if(dom!=null)
 					{
 						filters.add(parseDom(dom));

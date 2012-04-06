@@ -4,23 +4,15 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map.Entry;
-import java.util.Queue;
 import java.util.Random;
 
-import org.mortbay.jetty.servlet.Context;
 
-import com.db4o.Db4o;
 import com.db4o.Db4oEmbedded;
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
-import com.db4o.query.Predicate;
-
-import timestamps.Timestamp;
 
 
 public class OrbitStamps
@@ -84,7 +76,7 @@ public class OrbitStamps
 		
 		// INIT POLLER
 		poller = new DatabasePoll("ip", "usr", "pass");
-		//poller.start();
+		poller.start();
 		
 		
 		// Read filters
@@ -116,7 +108,6 @@ public class OrbitStamps
 		listAllPersistant();
 		
 		createDummyData();
-		processTimestamps();
 		
 		// INIT INTERFACE
 		server = new WebServer();
@@ -217,11 +208,7 @@ public class OrbitStamps
 				
 				operatingRooms.get(rum).addPerson(p);
 			}
-			
-			for(int y = 0; y < numStamps; y++)
-			{
-				operatingRooms.get(rum).newStamps.add(new Timestamp(Integer.toString(rand.nextInt(11))));
-			}
+			createDummyTimestamps(numStamps, rum, rand);
 		}
 			
 		for(int i = 0; i < 1000; i++)
@@ -229,7 +216,14 @@ public class OrbitStamps
 			
 		}
 	}
-	public static void processTimestamps()
+	public static void createDummyTimestamps(int numStamps, String rum, Random rand)
+	{
+		for(int y = 0; y < numStamps; y++)
+		{
+			operatingRooms.get(rum).newStamps.add(new Timestamp(Integer.toString(rand.nextInt(11))));
+		}
+	}
+	public static void processRoomTimestamps()
 	{
 		// no need if it's empty
 		if(filterManager != null && filterManager.filters.size() > 0)
@@ -238,34 +232,39 @@ public class OrbitStamps
 			{
 				Room room = roomEntry.getValue();
 				
-				for(Person person : room.getPeople())
+				
+				// if we have any new stamps here
+				if(room.newStamps.size() > 0)
 				{
-					// no need if no devices bound to this person
-					if(person.devices != null && person.devices.size() > 0) 
+					for(Person person : room.getPeople())
 					{
-						for(FilterMessage fm : filterManager.filters)
+						// no need if no devices bound to this person
+						if(person.devices != null && person.devices.size() > 0) 
 						{
-							// if the room, person, and timestamp is ok, its a match
-							if(fm.match(room, person))
+							for(FilterMessage fm : filterManager.filters)
 							{
-								// TODO: should go through some interface ...
-								room.messageHistory.addFirst(new CommunicationHistory(fm.msg, 
-																			person.devices.iterator().next(),
-																			CommunicationHistory.HISTORY_TYPE_AUTO,
-																			person.ID));
-								
-								log(OrbitStamps.LOG_NOTICE, "!!! Match found " + person.name + " role= " + person.role.getRole() + " room= " + room.roomID);
-							}
-							else
-							{
-								log(OrbitStamps.LOG_NOTICE, "NO MATCH " + person.name + " role= " + person.role.getRole() + " room= " + room.roomID);
+								// if the room, person, and timestamp is ok, its a match
+								if(fm.match(room, person))
+								{
+									// TODO: should go through some interface ...
+									room.messageHistory.addFirst(new CommunicationHistory(fm.msg, 
+																				person.devices.iterator().next(),
+																				CommunicationHistory.HISTORY_TYPE_AUTO,
+																				person.ID));
+									
+									log(OrbitStamps.LOG_NOTICE, "!!! Match found " + person.name + " role= " + person.role.getRole() + " room= " + room.roomID);
+								}
+								else
+								{
+									log(OrbitStamps.LOG_NOTICE, "NO MATCH " + person.name + " role= " + person.role.getRole() + " room= " + room.roomID);
+								}
 							}
 						}
 					}
+					
+					// move all the processed stuff to history.
+					room.newStamps.clear();
 				}
-				
-				// move all the processed stuff to history.
-				room.newStamps.clear();
 			}
 			
 		}

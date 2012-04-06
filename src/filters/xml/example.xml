@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
-<!DOCTYPE party SYSTEM "schema/message.dtd">
+<!DOCTYPE message SYSTEM "schema/message.dtd">
 <message>
 	<data>
 		<callback>123abc</callback>
 		<signal>2</signal>
 		<urgency>5</urgency>
-		<body>Nu är saxen i laxen!</body>
+		<body>Test test 123<room-name/></body>
 	</data>
 	<filter timestamp="10">
 		<role>Ssk ane</role>

@@ -8,36 +8,37 @@ String roomID = request.getParameter("room");
 
 if(roomID != null && !roomID.isEmpty() && OrbitStamps.operatingRooms.containsKey(roomID))
 {
-		Room room = OrbitStamps.operatingRooms.get(roomID);
-		%>
-		<div class="table">
-		<div class="header-row">
-		<div class="header">Tidpunkt</div>
-		<div class="header">Avsändare</div>
-		<div class="header" style="display:none;">HSAID</div>
-		<div class="header">Nummer</div>
-		<div class="header">Meddelande</div>
-		<div class="header">Status</div>
-		</div>
+	Room room = OrbitStamps.operatingRooms.get(roomID);
+	%>
+	{
+	"history": [
 	<%
-	
+	int i = 0;
+	int length = room.messageHistory.size();
 	for(CommunicationHistory old : room.messageHistory)
 	{
 	%>
-		<div class="row">
-		<div class="cell"><%= old.timeSent.getHours() + ":" + old.timeSent.getMinutes() + ":" + old.timeSent.getSeconds() %></div>
-		<div class="cell"><%= old.type == CommunicationHistory.HISTORY_TYPE_AUTO ? "Automatisk" : "Manuell" %></div>
-		<div class="cell personID" style="display:none;"><%= old.personID %></div>
-		<div class="cell"><%= old.recv.number %></div>
-		<div class="cell smallText"><%= old.msg.getBody() %></div>
-		<div class="cell"><%= old.status %></div>
-		</div>
+	{
+	 "uuid": "<%= old.uuid %>",
+     "time": "<%= old.timeSent.getHours() + ":" + old.timeSent.getMinutes() + ":" + old.timeSent.getSeconds() %>",
+     "type": "<%= old.type == CommunicationHistory.HISTORY_TYPE_AUTO ? "Automatisk" : "Manuell" %>",
+     "personID": "<%= old.personID %>",
+     "recvNumber": "<%= old.recv.number %>",
+     "body": "<%= old.msg.getBody() %>",
+     "status": <%= old.status %>
+    }
+     
 	<%
+	i++;
+	if(i < length)
+		out.print(",");
 	}
-%></div><%
+%>
+]}
+<%
 }
 else
 {
-	out.print("hittar ingen historik för sal " + roomID);
+
 }
 	%>

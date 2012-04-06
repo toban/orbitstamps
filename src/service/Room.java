@@ -3,7 +3,6 @@ package service;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-import timestamps.Timestamp;
 
 public class Room 
 {
