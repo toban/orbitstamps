@@ -14,7 +14,12 @@ import java.util.Random;
 
 import org.mortbay.jetty.servlet.Context;
 
-import roles.Role;
+import com.db4o.Db4o;
+import com.db4o.Db4oEmbedded;
+import com.db4o.ObjectContainer;
+import com.db4o.ObjectSet;
+import com.db4o.query.Predicate;
+
 import timestamps.Timestamp;
 
 
@@ -35,6 +40,9 @@ public class OrbitStamps
 	public static final String DIR_XML_FILTERS = "filters/xml";
 	static public final int LOG_ERROR = 0;
 	static public final int LOG_NOTICE = 0;
+	static public final String DATABASE_FILEPATH = "db/";
+	static public final String DATABASE_PERSON_FILEPATH = DATABASE_FILEPATH + "person.db4o";
+	static public final String DATABASE_ROOM_FILEPATH = DATABASE_FILEPATH + "room.db4o";
 	
 	public static void main(String [] args)
 	{	
@@ -44,6 +52,7 @@ public class OrbitStamps
 												+ "_" + cal.get(Calendar.HOUR_OF_DAY)
 												+ "" + cal.get(Calendar.MINUTE)
 												+ "" + cal.get(Calendar.SECOND);
+		
 		System.out.println(filename);
 		
 		if(LOG_TO_FILE)
@@ -88,7 +97,23 @@ public class OrbitStamps
 		
 		//INIT Rooms
 		operatingRooms = new HashMap<String, Room>();
-
+		
+		operatingRooms.put("1234", new Room("1234"));
+	    /*
+		Person p = new FunctionalPerson("Funktion",new Role(Role.ROLE_FUNKTION),"123", "1234");
+	    p.devices.add(new PagerReciever("1234"));
+		ObjectContainer db = Db4oEmbedded.openFile(Db4oEmbedded.newConfiguration(), DATABASE_PERSON_FILEPATH);
+		
+		try {
+	    db.store(p);
+		}
+		finally
+		{
+			db.close();
+		}
+		*/
+		loadPersistantData();
+		listAllPersistant();
 		
 		createDummyData();
 		processTimestamps();
@@ -98,6 +123,77 @@ public class OrbitStamps
 		server.init(8080);
 		
 		
+	}
+	
+	//populate orbit data with persistant data
+	private static void loadPersistantData()
+	{
+		// Setup DB4o 
+		ObjectContainer db = Db4oEmbedded.openFile(Db4oEmbedded.newConfiguration(), DATABASE_PERSON_FILEPATH);
+		try {
+
+			//ObjectSet<Object> result = db.queryByExample(Person.class);
+			ObjectSet<FunctionalPerson> result = db.queryByExample(FunctionalPerson.class); // load all rooms with persistant data
+			for(FunctionalPerson function : result)
+			{
+				if(operatingRooms.containsKey(function.roomID))
+				{
+					if(operatingRooms.get(function.roomID).getPerson(function.ID) == null)
+					{
+						operatingRooms.get(function.roomID).addPerson(function);
+					}
+				}
+			}
+		}
+		finally {
+		    db.close();
+		}
+	}
+	public static void listAllPersistant()
+	{
+		// Setup DB4o 
+		ObjectContainer db = Db4oEmbedded.openFile(Db4oEmbedded.newConfiguration(), DATABASE_PERSON_FILEPATH);
+		try {
+			ObjectSet<FunctionalPerson> result = db.queryByExample(FunctionalPerson.class); // load all rooms with persistant data
+			for(FunctionalPerson function : result)
+			{
+				System.out.println("ID= " +function.ID + ", name=" + function.name + ", room=" + function.roomID + ", devices=" + function.devices.size());
+			}
+		}
+		finally {
+		    db.close();
+		}
+	}
+	public static void savePersistantData()
+	{
+		ObjectContainer db = Db4oEmbedded.openFile(Db4oEmbedded.newConfiguration(), DATABASE_PERSON_FILEPATH);
+		try
+		{
+			for(Entry<String,Room> entry : operatingRooms.entrySet())
+			{
+				Room room = entry.getValue();
+				
+				for(Person p : room.getPeople())
+				{
+					if(p instanceof FunctionalPerson)
+					{
+						ObjectSet<FunctionalPerson> result = db.queryByExample(FunctionalPerson.class);
+						
+						for(FunctionalPerson found : result)
+						{
+							if(found.ID.equals(p.ID) && found.roomID.equals(((FunctionalPerson)p).roomID))
+								db.delete(found);
+						}
+						db.store(p);
+					}
+				}
+				
+				
+			}
+		}
+		finally {
+		    db.close();
+		}
 	}
 	public static void createDummyData()
 	{
@@ -153,7 +249,7 @@ public class OrbitStamps
 							if(fm.match(room, person))
 							{
 								// TODO: should go through some interface ...
-								room.messageHistory.add(new CommunicationHistory(fm.msg, 
+								room.messageHistory.addFirst(new CommunicationHistory(fm.msg, 
 																			person.devices.iterator().next(),
 																			CommunicationHistory.HISTORY_TYPE_AUTO,
 																			person.ID));
@@ -179,7 +275,7 @@ public class OrbitStamps
 		//Test Message
 		AscomPagerMessageChannel channel = new AscomPagerMessageChannel();
 		PagerReciever pager = new PagerReciever("7491");
-		Message msg = new Message("hello world", Urgency.LEVEL_IMPORTANT, Message.MESSAGE_BEEP_SIGNAL);
+		Message msg = new Message("hello world", Urgency.LEVEL_IMPORTANT, AscomPagerMessageChannel.MESSAGE_BEEP_SIGNAL);
 		channel.sendMessage(msg,pager);
 	}
 	public static void log(int type, String s)

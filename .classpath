@@ -17,5 +17,6 @@
 	<classpathentry kind="lib" path="libs/jsp-2.0/xercesImpl-2.6.2.jar"/>
 	<classpathentry kind="lib" path="libs/jsp-2.0/xmlParserAPIs-2.6.2.jar"/>
 	<classpathentry kind="lib" path="libs/jtds-1.2.5.jar"/>
+	<classpathentry kind="lib" path="libs/db4o-8.0.236.16058-all-java5.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

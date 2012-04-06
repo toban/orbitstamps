@@ -3,7 +3,6 @@ package service;
 import java.util.ArrayList;
 import java.util.List;
 
-import roles.Role;
 import timestamps.Timestamp;
 
 public class FilterMessage 
@@ -53,7 +52,7 @@ public class FilterMessage
 		OrbitStamps.log(OrbitStamps.LOG_NOTICE, "stamp= " + stamp.stamp);
 		OrbitStamps.log(OrbitStamps.LOG_NOTICE, "maxDelay= " + maxDelay);
 		OrbitStamps.log(OrbitStamps.LOG_NOTICE, "msg.body= " + msg.getBody());
-		OrbitStamps.log(OrbitStamps.LOG_NOTICE, "msg.signal= " + msg.getSignal());
+		OrbitStamps.log(OrbitStamps.LOG_NOTICE, "msg.signal= " + msg.signal);
 		OrbitStamps.log(OrbitStamps.LOG_NOTICE, "msg.urgency= " + msg.getUrgency());
 		OrbitStamps.log(OrbitStamps.LOG_NOTICE, "FilterMessage: DEBUG PRINT END");
 	}

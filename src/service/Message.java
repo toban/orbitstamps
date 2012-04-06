@@ -1,31 +1,11 @@
 package service;
 
-/**
- * 
- * Signal BP
- * 7 =
- * 6 = 
- * 5 = telephone-ish HIGHER
- * 4 = telehpone-ish
- * 3 = (standard ramp up) beep beep beep
- * 2 = beep beep
- * 1 = beep
- * @author tobias
- *
- */
 public class Message 
-{
-	public static final int MESSAGE_DEFAULT_SIGNAL = 3;
-	public static final int MESSAGE_BEEP_SIGNAL = 1;
-	public static final int MESSAGE_2BEEP_SIGNAL = 2;
-	public static final int MESSAGE_3BEEP_UP_SIGNAL = 3;
-	public static final int MESSAGE_PHONE_SIGNAL = 4;
-	public static final int MESSAGE_PHONE_HIGH_SIGNAL = 5;
-	
+{	
 	private String body;
 	private int urgency;
 	private String callback;
-	private int signal;
+	public int signal;
 	
 	public Message(String body, int urgency, int signal)
 	{
@@ -33,13 +13,7 @@ public class Message
 		this.urgency = urgency;
 		this.signal = signal;
 	}
-	public int getSignal()
-	{
-		if(signal!=0)
-			return signal;
-		else
-			return MESSAGE_DEFAULT_SIGNAL;
-	}
+
 	public String getMessage()
 	{
 		StringBuilder sb = new StringBuilder();

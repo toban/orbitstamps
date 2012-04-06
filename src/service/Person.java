@@ -4,15 +4,15 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-import roles.Role;
 
-public class Person 
+public class Person
 {
 	public String name;
 	public String ID;
 	public Role role;
 	public ArrayList<MessageReciever> devices;
 	public Date dateAdded;
+	
 	public Person(String name, Role role, String ID)
 	{
 		this.ID = ID;
@@ -20,6 +20,16 @@ public class Person
 		this.role = role;
 		this.devices = new ArrayList<MessageReciever>();
 		dateAdded = new Date(); 
+	}
+	
+	public MessageReciever getDeviceCompatibleWith(MessageChannel mch)
+	{
+		for(MessageReciever mr : devices)
+		{
+			if(mr.isCompatibleWith(mch))
+				return mr;
+		}
+		return null;
 	}
 	
 	public boolean equals(Object obj)

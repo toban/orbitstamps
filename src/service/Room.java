@@ -1,6 +1,7 @@
 package service;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import timestamps.Timestamp;
 
@@ -9,14 +10,23 @@ public class Room
 	public String roomID;
 	private ArrayList<Person> people;
 	public ArrayList<Timestamp> newStamps;
-	public ArrayList<CommunicationHistory> messageHistory;
+	public LinkedList<CommunicationHistory> messageHistory;
 	
 	public Room(String roomID)
 	{
 		this.newStamps = new ArrayList<Timestamp>();
-		this.messageHistory = new ArrayList<CommunicationHistory>();
+		this.messageHistory = new LinkedList<CommunicationHistory>();
 		this.setPeople(new ArrayList<Person>());
 		this.roomID = roomID;
+	}
+	public Person getPerson(String id)
+	{
+		for(Person p : people)
+		{ 
+			if(p.ID.equals(id))
+				return p;
+		}
+			return null;
 	}
 	public boolean addPerson(Person p)
 	{

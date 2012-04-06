@@ -12,6 +12,27 @@ import java.util.Map;
 
 public class AscomPagerMessageChannel implements MessageChannel {
 
+	
+	/**
+	 * 
+	 * Signal BP
+	 * 7 =
+	 * 6 = 
+	 * 5 = telephone-ish HIGHER
+	 * 4 = telehpone-ish
+	 * 3 = (standard ramp up) beep beep beep
+	 * 2 = beep beep
+	 * 1 = beep
+	 * @author tobias
+	 *
+	 */
+	public static final int MESSAGE_DEFAULT_SIGNAL = 3;
+	public static final int MESSAGE_BEEP_SIGNAL = 1;
+	public static final int MESSAGE_2BEEP_SIGNAL = 2;
+	public static final int MESSAGE_3BEEP_UP_SIGNAL = 3;
+	public static final int MESSAGE_PHONE_SIGNAL = 4;
+	public static final int MESSAGE_PHONE_HIGH_SIGNAL = 5;
+	
 	public final String formURL;
 	
 	public AscomPagerMessageChannel()
@@ -28,7 +49,7 @@ public class AscomPagerMessageChannel implements MessageChannel {
 			
 			// setup query
 			String query = String.format("pri=7&bp=%s&url=&ack=0&no=%s&msg=%s",
-									 URLEncoder.encode(Integer.toString(msg.getSignal()), charset),
+									 URLEncoder.encode(Integer.toString(getSignal()), charset),
 									 URLEncoder.encode(recv.number.toString(), charset), 
 									 URLEncoder.encode(msg.getMessage(), charset));
 			
@@ -55,7 +76,6 @@ public class AscomPagerMessageChannel implements MessageChannel {
 		catch(IOException ex)
 		{
 			ex.printStackTrace();
-			System.out.println("made it here");
 			return false;
 		}
 	}
@@ -64,6 +84,11 @@ public class AscomPagerMessageChannel implements MessageChannel {
 	public boolean isAvaliable() 
 	{
 		return false;
+	}
+	@Override
+	public int getSignal() 
+	{
+			return MESSAGE_DEFAULT_SIGNAL;
 	}
 
 	

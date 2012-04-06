@@ -9,12 +9,14 @@ public class CommunicationHistory
 	public final int type;
 	public final String personID;
 	public final Date timeSent;
+	public final int status;
 	
 	public final static int HISTORY_TYPE_AUTO = 0;
 	public final static int HISTORY_TYPE_MANUAL = 1;
 	
 	public CommunicationHistory(Message msg, MessageReciever recv, int type, String personID)
 	{
+		this.status = 1;
 		this.personID = personID;
 		this.type = type;
 		this.msg = msg;

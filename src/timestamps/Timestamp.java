@@ -2,7 +2,7 @@ package timestamps;
 
 import java.util.Calendar;
 
-import roles.Role;
+import service.Role;
 
 
 public class Timestamp 

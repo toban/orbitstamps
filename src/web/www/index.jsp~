@@ -1,0 +1,27 @@
+<%@ page import="service.OrbitStamps" %>
+<%@ include file="includes/header.jsp" %>
+<%@ include file="includes/menu.jsp" %>
+<%
+int pageID = 0;
+try
+{
+	pageID = Integer.parseInt(request.getParameter("page"));	
+}
+catch(Exception e)
+{
+	pageID = 0;
+}
+switch(pageID)
+{
+case 0:
+	%><%@include file="includes/start_overview.jsp" %><%
+	break;
+case 1:
+	%><%@include file="includes/room_overview.jsp" %><%
+	break;
+default:
+	%><%@include file="includes/service_overview.jsp" %><%
+	break;
+}
+%>
+<%@ include file="includes/footer.jsp" %>

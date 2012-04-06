@@ -6,4 +6,14 @@ public class PagerReciever extends MessageReciever {
 	{
 		this.number = number;
 	}
+
+	@Override
+	public boolean isCompatibleWith(MessageChannel mch) 
+	{
+		if(mch instanceof AscomPagerMessageChannel)
+		{
+			return true;
+		}
+		return false;
+	}
 }

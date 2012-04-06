@@ -12,11 +12,35 @@ body
 {
 	font-size: 12px;
 }
+/* room */
+.room-overview-container
+{
+	display: inline-block;
+	padding: 10px;
+	width: 100px;
+	height: 100px;
+	border: 5px solid #555;
+	margin: 5px;
+}
+.room-overview-container a
+{
+	width: 100%;
+	height: 100%;
+	display: inline-block;
+}
+/* room end */
+.room-container
+{
+	width: auto;
+	display: inline-block;
+}
 #menu
 {
+	
 	height: 50px;
 	width: 100%;
-	background: #eee;
+	border-bottom: 4px #555 solid;
+	background-image: url(/img/timeline-bg.png);
 }
 #menu ul
 {
@@ -30,27 +54,62 @@ body
 {
 	height: 50px;
 	display: inline-block;
+	
+}
+label
+{
+	display: block;
 }
 #menu ul li a
 {
+	border-left: 1px solid #CCC;
+	border-right: 1px solid #CCC;
+	text-align: center;
 	height: 40px;
-	padding: 5px;
-	width: 100px;
+	padding-left: 20px;
+	padding-right: 20px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	width: auto;
 	text-decoration: none;
 	color: #333;
 	line-height: 40px;
 	display: inline-block;
 	margin-left: 20px;
 }
-#menu ul li a:hover
-{
-	background: #333;
-	color: FFF;
-}
-.room-container
+.new-msg-field
 {
 	display: inline-block;
-	width: auto;
+	vertical-align: top;
+	margin-left: 10px;
+	border: 2px solid #EEE;
+	padding: 10px;
+}
+#recv-container
+{
+}
+.recv-item
+{
+	padding: 5px;
+	display: inline-block;
+	background: #eee;
+	margin: 5px;
+	color: #333;
+	text-decoration: none;
+}
+.msg-selected
+{
+	font-weight: bold;
+}
+.recv-item:hover
+{
+	background: #333;
+	color: #eee;
+}
+#menu ul li a:hover
+{
+	background: #CCC;
+	color: #333;
 }
 #history
 {
@@ -76,6 +135,7 @@ body
 #search
 {
 	display: inline-block;
+	float: right;
 	height: 40px;
 	line-height: 40px;
 	padding: 5px;
@@ -124,21 +184,126 @@ body
 	border-right:10px solid #9966FF;
 }
 /* ROLE END */
+/* timeline-start */
+.last-element
+{
+	background-image: url(/img/timeline-bg.png);
+	border-left: 2px solid #999;
+}
+
+#timeline-mini-button
+{
+	display: block;
+	text-decoration: none;
+	color: #FFF;
+	background-color: #555;
+	width: 30px;
+	text-align: center;
+	height: 20px;
+	position: absolute;
+	right: 0;
+}
+#timeline-container
+{
+	display: block;
+	width: inherit;
+}
+.timeline-table
+{
+	display: table;
+	height: 100%;
+	width: 100%;
+}
+.timeline-row
+{
+	display: table-row;
+	height: 100%;
+	width: 100%;
+}
+.timeline-cell a
+{
+	cursor: pointer;
+	text-align: center;
+	padding-top: 5px;
+	display: inline-block;
+	height: 100%;
+	width: 100%;
+	color: #333;
+	text-decoration: none;
+	font-size: 10px;
+	background-image: url(/img/timeline-bg.png);
+}
+.timeline-cell a:hover
+{
+	cursor: pointer;
+	background-color: #EEE;
+}
+.timeline-cell
+{
+	vertical-align: top;
+	overflow: none;
+	display: table-cell;
+	
+	height: 100%;
+}
+.operation-timeline
+{
+	height: 53px;
+	background-repeat: repeat-x;
+	background: #b4b4b4;
+	background: #CCC;
+	border-bottom: 4px #555 solid;
+}
+/* timeline end */
 #create-message-container
 {
 	display: none;
-	margin: 10px;
+	margin: 5px;
 	width: inherit;
 	background: #CCC;
-	padding-top: 10px;
-	padding-left: 10px;
-	padding-bottom: 10px;
+	padding: 10px;
+	border: 5px solid #333;
+	position: relative;
+}
+#create-message-container label
+{
+	font-size: 12px;
+	color: #333;
+	margin-bottom: 5px;
+	font-weight: bold;
+}
+#new-msg-submit
+{
+	font-size: 20px;
 }
 h3
 {
-	margin:0;
+	margin-top:0;
+	margin-left: 0;
+	margin-right: 0;
+	margin-bottom: 10px;
 	padding: 0;
+	display: inline-block;
 	
+}
+.window-button
+{
+	padding: 5px;
+	color: #FFF;
+	display: inline-block;
+	width: 15px;
+	height: 15px;
+	float: right;
+	line-height: 15px;
+	text-align: center;
+	margin-left: 10px;
+	background: #555;
+	text-decoration: none;
+}
+.window-button:hover
+{
+	background: #FFF;
+	color: #000;
 }
 h1
 {
@@ -160,7 +325,7 @@ h2
 {
 	display: table;
 	width: 100%;
-	background: #AAA;
+	background: #CCC;
 }
 .cell
 {
