@@ -18,6 +18,8 @@ public class CommunicationHistory
 	
 	public CommunicationHistory(Message msg, MessageReciever recv, int type, String personID)
 	{
+
+
 		this.uuid = UUID.randomUUID();
 		this.status = 1;
 		this.personID = personID;

@@ -36,6 +36,10 @@ public class OrbitStamps
 	static public final String DATABASE_PERSON_FILEPATH = DATABASE_FILEPATH + "person.db4o";
 	static public final String DATABASE_ROOM_FILEPATH = DATABASE_FILEPATH + "room.db4o";
 	
+	static public final String[] STATIC_TEMPLATE_MESSAGES = {"Patienten har anlänt PREOP", 
+															"Patienten har anlänt på sal",
+															"Anestesi påbörjad"};
+	
 	public static void main(String [] args)
 	{	
 		cal = Calendar.getInstance();
@@ -84,7 +88,7 @@ public class OrbitStamps
 		
 		for(FilterMessage fm : filterManager.filters)
 		{
-				//fm.printDebug();
+				fm.printDebug();
 		}
 		
 		//INIT Rooms
@@ -138,6 +142,35 @@ public class OrbitStamps
 		}
 		finally {
 		    db.close();
+		}
+	}
+	public static void deleteFunctionalPerson(String id, String roomID)
+	{
+		Room room = operatingRooms.get(roomID);
+		if(room == null)
+			return;
+		
+		Person p  = room.getPerson(id);
+		if(p==null)
+			return;
+		
+		if(p instanceof FunctionalPerson)
+		{
+			room.deletePerson(p);
+			// Setup DB4o 
+			ObjectContainer db = Db4oEmbedded.openFile(Db4oEmbedded.newConfiguration(), DATABASE_PERSON_FILEPATH);
+			try {
+				ObjectSet<FunctionalPerson> result = db.queryByExample(FunctionalPerson.class);
+				
+				for(FunctionalPerson found : result)
+				{
+					if(found.ID.equals(id) && found.roomID.equals(roomID))
+						db.delete(found);
+				}
+			}
+			finally {
+			    db.close();
+			}
 		}
 	}
 	public static void listAllPersistant()

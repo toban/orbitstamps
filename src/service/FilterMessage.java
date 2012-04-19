@@ -20,6 +20,7 @@ public class FilterMessage
 		this.rooms = rooms;
 		this.msg = msg;
 		
+		
 	}
 	// check if the room's timestamp and role matches 
 	public boolean match(Room r, Person p)

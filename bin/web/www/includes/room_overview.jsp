@@ -1,11 +1,10 @@
-<%@ page import="roles.*" %>
 <%@ page import="service.Room" %>
 <%@ page import="service.Message" %>
 <%@ page import="service.CommunicationHistory" %>
 <%@ page import="service.Person" %>
 <%@ page import="java.util.Map.Entry" %>
 <%@ page import="service.OrbitStamps" %>
-<% String roomID = request.getParameter("room"); %>
+
 <script type="text/javascript">
 $(document).ready(function()
 		{
@@ -20,22 +19,18 @@ $(document).ready(function()
 					   {
 				
 					     
-					     var obj = JSON.parse(data);
-					     
+					     var obj = $.parseJSON(data);
+						 obj.history = obj.history.reverse();
 					     for(var i = 0; i < obj.history.length; i++)
 					    	 {
 					    	 	var item = obj.history[i];
-					    	 	if(msgHistory.indexOf(item.uuid) == -1)
+					    	 	if($.inArray(item.uuid,msgHistory) == -1)
 					    	 		{
 					    	 			msgHistory.push(item.uuid)
-										var htmlItem = $("<div class='row history'><div class='cell'>"+item.time+"</div><div class='cell'>"+item.type+"</div><div class='cell personID' style='display:none;'>"+item.personID+"</div><div class='cell'>"+item.recvNumber+"</div><div class='cell smallText'>"+item.body+"</div><div class='cell'>"+item.status+"</div></div>");
+										var htmlItem = $("<tr class='row history'><td class='cell'>"+item.time+"</td><td class='cell'>"+item.type+"</td><td class='cell personID'>"+item.personID+"</td><td class='cell'>"+item.recvNumber+"</td><td class='cell smallText'>"+item.body+"</td><td class='cell'>"+item.status+"</td></tr>");
 					    	 			$("#history-table-container .table .header-row").after(htmlItem);
 					    	 			htmlItem.hide();
 					    	 			htmlItem.fadeIn();
-					    	 		}
-					    	 	else
-					    	 		{
-					    	 		
 					    	 		}
 					    	 }
 					     var date = new Date();
@@ -66,6 +61,8 @@ $(document).ready(function()
 			$("#new-msg-submit").click(function()
 			{
 				var message = $("#msg").val();
+				$("#msg-input-container").slideToggle();
+				$("#msg-sending-info").show();
 				if(newMsgRecv.length > 0)
 				{
 				$.post("includes/functions/sendMessage.jsp", {'recv[]': newMsgRecv,
@@ -81,10 +78,12 @@ $(document).ready(function()
 							$("#recv-container").html("");
 							newMsgRecv = new Array();
 							var newMsg = $("#create-message-container");
-							$("div.room-container div").removeClass("msg-selected");
-							newMsg.slideUp();
+							$("div.room-container tr").removeClass("msg-selected");
+							//newMsg.slideUp();
 							createNewMessage = true;
 							historyUpdate();
+							$("#msg-input-container").slideToggle();
+							$("#msg-sending-info").hide();
 						    
 						   });
 				}
@@ -96,7 +95,7 @@ $(document).ready(function()
 			/*
 			ADD NEW RECIEVER TO MESSAGE, CREATE MESSAGE
 			*/
-			$("div.room-container div.row").click(function()
+			$("div.room-container tr.row").click(function()
 			{
 				var newMsg = $("#create-message-container");	
 				
@@ -108,24 +107,24 @@ $(document).ready(function()
 				}
 				
 				$(this).addClass("msg-selected");
-				var newRecv = $(this).children("div.cell.personID").text();
-				var newRecvTitle = $(this).children("div.cell.namn").text(); 
+				var newRecv = $(this).children("td.cell.personID").text();
+				var newRecvTitle = $(this).children("td.cell.namn").text(); 
 				
-				if(newMsgRecv.indexOf(newRecv) === -1)
+				if($.inArray(newRecv,newMsgRecv) === -1)
 				{
 					newMsgRecv.push(newRecv);
 					var currentVal = newMsg.children("input#recv").val();
-					console.log(newRecv);
+					
 					var item = $("<a class='recv-item' href='#' title='Klicka för att ta bort!' id='recv_"+newRecv+"'>" + newRecvTitle + "</a>");
-					item.addClass($(this).children("div.cell.roll").text().replace(" ", "-"));
+					item.addClass($(this).children("td.cell.roll").text().replace(" ", "-"));
 					//item.addClass()
 					$("#recv-container").append(item);
 				}
 				else // clicked again, already selected
 				{
 					
-					var index = newMsgRecv.indexOf(newRecv);
-					console.log(index);
+					var index = $.inArray(newRecv,newMsgRecv);
+					
 					newMsgRecv.splice(index,1);
 					$("#recv_"+newRecv).hide(100, function(){
 						$("#recv_"+newRecv).remove();
@@ -138,10 +137,10 @@ $(document).ready(function()
 			$(".recv-item").live("click", function()
 					{
 						
-						console.log($(this).attr("id"))
+						
 						var thisVar = $(this).attr("id").split("_")[1];
-						var index = newMsgRecv.indexOf(thisVar);
-						console.log(index);
+						var index = $.inArray(thisVar,newMsgRecv);
+					
 						if(index != -1)
 						{
 							
@@ -154,7 +153,7 @@ $(document).ready(function()
 					});
 			var updateCharCount = function()
 			{
-				console.log("asdas");
+				
 				if($("#msg").val().length > 120)
 				{
 					$("#msg").val($("#msg").val().substring(0,120));
@@ -163,21 +162,56 @@ $(document).ready(function()
 				$("#char-counter").text(charLength)
 			};
 			
+			var updateCallback = function(obj) {
+				
+				var pos = $.inArray("]", $("#msg").val());
+				if(pos != -1)
+					$("#msg").val($("#msg").val().substring(pos+2,120));
+				
+				if($("#msg-callback").val().length > 0)
+					var text = "["+$.trim($(obj).val())+"] " + $("#msg").val();
+				else
+					var text = $("#msg").val();
+				
+				
+				
+				$("#msg").val(text)
+				updateCharCount();
+			}
+			/* callback events*/
+			$("#msg-callback").change(function(e)
+				{
+					updateCallback(this);	
+				});
+			$("#msg-callback").keyup(function(e)
+				{
+					updateCallback(this);	
+				});
+			$("#msg-callback").focus(function(e)
+					{
+						updateCallback(this);	
+					});
 			/* msg events */
 			$("#msg").keydown(function()
 					{
+						
 						updateCharCount();
+						updateCallback($("#msg-callback"));	
 					});
 			$("#msg").change(function()
 					{
 						updateCharCount();
+						updateCallback($("#msg-callback"));	
 					});
 			
 			$("#msg-template").change(function()
 					{
 						var val = $("#msg-template option:selected").val();
 						$("#msg").val(val);
+						
 						updateCharCount();
+						updateCallback($("#msg-callback"));
+						
 					});
 			
 			/* minify timeline */
@@ -187,39 +221,39 @@ $(document).ready(function()
 					});
 			
 			/* personal pa sal hovering */
-			$("div.room-container div.row").hover(function()
+			$("div.room-container tr.row").hover(function()
 			{
-				var pID = $(this).children("div.cell.personID").text();
+				var pID = $(this).children("td.cell.personID").text();
 				
 				$(this).addClass("hovering");
-				$("#history div.cell.personID").each(function()
+				$("#history td.cell.personID").each(function()
 				{
 					var that = $(this);
 					
 					if(that.text()==pID)
-						that.parent().addClass("hovering");
+						that.parent().addClass("second-hovering");
 				});
 			},function(){
 				$(this).removeClass("hovering");
-				$("#history div.row").removeClass("hovering");
+				$("#history tr.row").removeClass("second-hovering");
 			});
 			/* personal pa sal hovering */
-			$("div.row.history").live("mouseover", function()
+			$("tr.row.history").live("mouseover", function()
 			{
-				var pID = $(this).children("div.cell.personID").text();
+				var pID = $(this).children("td.cell.personID").text();
 				
 				$(this).addClass("hovering");
 			
-				$(".room-container div.cell.personID").each(function()
+				$(".room-container td.cell.personID").each(function()
 				{
 					var that = $(this);
 					if(that.text()==pID)
-						that.parent().addClass("hovering");
+						that.parent().addClass("second-hovering");
 				});
 			});
-			$("div.row.history").live("mouseout",function(){
+			$("tr.row.history").live("mouseout",function(){
 				$(this).removeClass("hovering");
-				$(".room-container div.row").removeClass("hovering");
+				$(".room-container tr.row").removeClass("second-hovering");
 			});
 			historyUpdate();
 			setInterval(historyUpdate,10000);
@@ -237,15 +271,15 @@ else
 		%>
 		<div id="timeline-container">
 		<div class="operation-timeline" style="display: none;">
-			<div class="timeline-table">
-			<div class="timeline-row">
-			<div class="timeline-cell" style="background-color: #F0A;"><a title="tidpunkt" href="#">PREOP</a></div>
-			<div class="timeline-cell" style="background-color: #FAA;"><a title="tidpunkt" href="#">ANST</a></div>
-			<div class="timeline-cell" style="background-color: #3AA;"><a title="tidpunkt" href="#">ANST</a></div>
-			<div class="timeline-cell" style="background-color: #CA0;"><a title="tidpunkt" href="#">ANST</a></div>
-			<div class="timeline-cell last-element" style="width: 50%"></div>
-			</div>
-			</div>
+			<table class="timeline-table">
+			<tr class="timeline-row">
+			<td class="timeline-cell" style="background-color: #F0A;"><a title="tidpunkt" href="#">PREOP</a></td>
+			<td class="timeline-cell" style="background-color: #FAA;"><a title="tidpunkt" href="#">ANST</a></td>
+			<td class="timeline-cell" style="background-color: #3AA;"><a title="tidpunkt" href="#">ANST</a></td>
+			<td class="timeline-cell" style="background-color: #CA0;"><a title="tidpunkt" href="#">ANST</a></td>
+			<td class="timeline-cell last-element" style="width: 50%"></td>
+			</tr>
+			</table>
 			
 		</div>
 		<a href="#" title="Dölj/visa operationsflödet" id="timeline-mini-button">&uarr;&darr;</a>
@@ -255,81 +289,96 @@ else
 		
 		<!-- new message start -->
 		<div id="create-message-container">
-		<div>
-		<h3>Skicka ett meddelande</h3>
-		<a href="#" class="window-button" id="new-msg-close">X</a><a href="#" class="window-button" id="new-msg-mini">_</a>
-		</div>
-
-		<div class="new-msg-field" style="width: 40%;">
-		<div style="display: block;">
-		<label for="msg-template">Meddelande-mall</label>
-			<select name="msg-template" id="msg-template">
-				<option value="" class="msg-template-item">* Nytt meddelande</option>
-				<option value="Patienten har anlänt på sal" class="msg-template-item">Patienten har anlänt på sal</option>
-				<option value="Patienten har anlänt PREOP" class="msg-template-item">Patienten har anlänt PREOP</option>
-			</select>
-		
-		</div>
-		<div>
-		<label for="sender">Meddelande</label>
-		<textarea name="msg" id="msg" style="width: 100%;" rows="3"></textarea>
-		</div>
-		<em>Du har <span id="char-counter">120</span> bokstäver kvar.</div></em>
-		<div class="new-msg-field" style="width: 40%;">
-		<label for="recv-container">Mottagare</label>
-		<div id="input-recv-error" style="display: none; color: #F00;">Mottagare saknas!</div>
-		<div id="recv-container"></div>
-		<!--  <input type="hidden" name="recv" id="recv" />  -->
-		</div>
-
-		<div style="float: right; position: absolute; bottom: 10px; right: 10px;">
-		<input type="submit" id="new-msg-submit" value="Skicka" />
-		</div>
+			<center><div id="msg-sending-info" ><img style="width: 100px; height: 100px;" src="img/loading-gif-animation.gif" /></div></center>
+			
+			<div id="msg-input-container">
+			<div>
+			<h3>Skicka ett meddelande</h3>
+			<a href="#" class="window-button" id="new-msg-close">X</a><a href="#" class="window-button" id="new-msg-mini">_</a>
+			</div>
+	
+			<div class="new-msg-field" style="width: 40%;">
+			<div style="display: block;">
+			<div style="display: inline-block;">
+			<label for="msg-template">Meddelande-mall</label>
+				<select name="msg-template" id="msg-template">
+					<option value="" class="msg-template-item">* Nytt meddelande</option>
+					<% for(String s : OrbitStamps.STATIC_TEMPLATE_MESSAGES) { %>
+					<option value="<%= s %>" class="msg-template-item"><%= s %></option>
+					<% } %>
+				</select>
+				</div>
+				<div style="display: inline-block;">
+				<label for="msg-callback">Avsändare</label>
+				<input type="text" name="msg-callback" id="msg-callback">
+				</div>
+			</div>
+			<div>
+			<label for="sender">Meddelande</label>
+			<textarea name="msg" id="msg" style="width: 100%;" rows="3"></textarea>
+			</div>
+			<em>Du har <span id="char-counter">120</span> bokstäver kvar.</div></em>
+			<div class="new-msg-field" style="width: 40%;">
+			<label for="recv-container">Mottagare</label>
+			<div id="input-recv-error" style="display: none; color: #F00;">Mottagare saknas!</div>
+			<div id="recv-container"></div>
+			<!--  <input type="hidden" name="recv" id="recv" />  -->
+			</div>
+	
+			<div style="float: right; position: absolute; bottom: 10px; right: 10px;">
+			<input type="submit" id="new-msg-submit" value="Skicka" />
+			</div>
+			</div>
 		</div>
 		<!--  new mssage stop -->
 		
 		<div class="table-container">
 		<div class="room-container" style="width: 40%;">
 		<h2>Personal på sal</h2>
-		<div class="table">
+		<table class="table">
 		
-			<div class="header-row">
-			<div class="header">HSAID</div>
-			<div class="header">Namn</div>
-			<div class="header">Roll</div>
-			</div>
+			<tr class="header-row">
+			<td class="header">HSAID</td>
+			<td class="header">Namn</td>
+			<td class="header">Roll</td>
+			</tr>
 		<%
 		int counter = 0;
 		for(Person p : room.getPeople())
 		{
 		%>
-			<div alt="Klicka för att skicka ett meddelande" title="Klicka för att skicka ett meddelande" class="row clickable" id="row_<%= p.ID %>">
-			<div class="cell personID"><%= p.ID %></div>
-			<div class="cell namn"><%= p.name %></div>
-			<div class="cell roll <%= p.role.getRole().replaceAll(" ", "-") %>"><%= p.role.getRole() %></div>
-			</div>
+			<tr alt="Klicka för att skicka ett meddelande" title="Klicka för att skicka ett meddelande" class="row clickable" id="row_<%= p.ID %>">
+			<td class="cell personID"><% 
+			if(p.ID.length() > 8)
+				out.print(p.ID.substring(0,8));
+			else
+				out.print(p.ID);
+			%></td>
+			<td class="cell namn"><%= p.name %></td>
+			<td class="cell roll <%= p.role.getRole().replaceAll(" ", "-") %>"><%= p.role.getRole() %></td>
+			</tr>
 		<%
 		counter++;
 		}
 		%>
-		</div> <!-- end table -->
+		</table> <!-- end table -->
 		</div> <!-- end room -->
 		
 		<div id="history" style="width: 58%;">
 		<h2>Meddelande historik</h2><span id="history-update"></span>
 		<div id="history-table-container">
 		<!-- history post start -->
-		<div class="table">
-		<div class="header-row">
-		<div class="header">Tidpunkt</div>
-		<div class="header">Avsändare</div>
-		<div class="header" style="display:none;">HSAID</div>
-		<div class="header">Nummer</div>
-		<div class="header">Meddelande</div>
-		<div class="header">Status</div>
-		</div>
+		<table class="table">
+		<tr class="header-row">
+		<td class="header">Tidpunkt</td>
+		<td class="header">Avsändare</td>
+		<td class="header">HSAID</td>
+		<td class="header">Nummer</td>
+		<td class="header">Meddelande</td>
+		<td class="header">Status</td>
+		</tr>
 
-		</div>
+		</table>
 		<!-- history post end -->
 		</div>
 		</div> <!-- end history -->

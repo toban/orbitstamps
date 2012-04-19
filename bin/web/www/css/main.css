@@ -121,6 +121,11 @@ label
 	background: #333;
 	color: #FFF;
 }
+.second-hovering
+{
+	background: #666;
+	color: #FFF;
+}
 #content
 {
 	width: auto;
@@ -257,7 +262,6 @@ label
 /* timeline end */
 #create-message-container
 {
-	display: none;
 	margin: 5px;
 	width: inherit;
 	background: #CCC;
@@ -310,6 +314,22 @@ h1
 	margin: 0;
 	padding: 0;
 }
+#msg-sending-info
+{
+	display: none;
+	background: white;
+	padding: 20px;
+}
+td.cell.delete a
+{
+	display: block;
+	width: 32px;
+	height: 32px;
+	text-decoration:none;
+	background-image: url(../img/cancel.png);
+	
+}
+label.error { float: none; color: red; vertical-align: top; }
 #history-update
 {
 	font-size: 10px;
@@ -326,6 +346,7 @@ h2
 	display: table;
 	width: 100%;
 	background: #CCC;
+	border-spacing: 0px;
 }
 .cell
 {

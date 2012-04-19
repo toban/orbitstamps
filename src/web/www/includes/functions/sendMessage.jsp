@@ -26,6 +26,7 @@ Room room = OrbitStamps.operatingRooms.get(roomID);
 for(String id : recv)
 {
 	Person p = room.getPerson(id);
+	out.print(p);
 	if(p==null)
 		continue;
 	else
@@ -37,6 +38,12 @@ for(String id : recv)
 		}
 		else
 		{
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) 
+			{
+				e.printStackTrace();
+			}
 			room.messageHistory.addFirst(new CommunicationHistory(msg, 
 															pr, 
 															CommunicationHistory.HISTORY_TYPE_MANUAL,

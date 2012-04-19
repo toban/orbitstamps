@@ -27,6 +27,10 @@ public class Room
 		}
 			return null;
 	}
+	public void deletePerson(Person p)
+	{
+			people.remove(p);
+	}
 	public boolean addPerson(Person p)
 	{
 		if(!getPeople().contains(p))
