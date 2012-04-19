@@ -1,9 +1,9 @@
-<%@ page import="service.Room" %>
+<%@ page import="service.model.Room" %>
 
 <%@ page import="service.OrbitStamps" %>
-<%@ page import="service.Role" %>
-<%@ page import="service.FunctionalPerson" %>
-<%@ page import="service.PagerReciever" %>
+<%@ page import="service.model.Role" %>
+<%@ page import="service.model.FunctionalPerson" %>
+<%@ page import="service.communication.PagerReciever" %>
 <%@ page import="java.util.Iterator" %>
 <%@ page import="java.util.UUID" %>
 <%

@@ -1,7 +1,7 @@
-<%@ page import="service.Room" %>
-<%@ page import="service.Message" %>
+<%@ page import="service.model.Room" %>
+<%@ page import="service.communication.Message" %>
 <%@ page import="service.OrbitStamps" %>
-<%@ page import="service.CommunicationHistory" %>
+<%@ page import="service.communication.CommunicationHistory" %>
 <%@ page import="java.util.Iterator" %>
 <%
 String roomID = request.getParameter("room");

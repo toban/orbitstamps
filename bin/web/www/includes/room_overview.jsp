@@ -1,7 +1,7 @@
-<%@ page import="service.Room" %>
-<%@ page import="service.Message" %>
-<%@ page import="service.CommunicationHistory" %>
-<%@ page import="service.Person" %>
+<%@ page import="service.model.Room" %>
+<%@ page import="service.communication.Message" %>
+<%@ page import="service.communication.CommunicationHistory" %>
+<%@ page import="service.model.Person" %>
 <%@ page import="java.util.Map.Entry" %>
 <%@ page import="service.OrbitStamps" %>
 
@@ -61,12 +61,15 @@ $(document).ready(function()
 			$("#new-msg-submit").click(function()
 			{
 				var message = $("#msg").val();
-				$("#msg-input-container").slideToggle();
-				$("#msg-sending-info").show();
+;
 				if(newMsgRecv.length > 0)
 				{
+				$("#msg-input-container").slideToggle();
+				$("#msg-sending-info").show()	
+				var callback = $("#msg-callback").val();
 				$.post("includes/functions/sendMessage.jsp", {'recv[]': newMsgRecv,
 																room: <%= roomID %>,
+																callback: callback,
 																msg: message},
 						   function(data) // message sent callback
 						   {
@@ -296,7 +299,6 @@ else
 			<h3>Skicka ett meddelande</h3>
 			<a href="#" class="window-button" id="new-msg-close">X</a><a href="#" class="window-button" id="new-msg-mini">_</a>
 			</div>
-	
 			<div class="new-msg-field" style="width: 40%;">
 			<div style="display: block;">
 			<div style="display: inline-block;">

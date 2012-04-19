@@ -1,7 +1,7 @@
-<%@ page import="service.Room" %>
-<%@ page import="service.Message" %>
-<%@ page import="service.CommunicationHistory" %>
-<%@ page import="service.Person" %>
+<%@ page import="service.model.Room" %>
+<%@ page import="service.communication.Message" %>
+<%@ page import="service.communication.CommunicationHistory" %>
+<%@ page import="service.model.Person" %>
 <%@ page import="java.util.Map.Entry" %>
 <%@ page import="service.OrbitStamps" %>
 

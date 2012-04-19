@@ -9,6 +9,19 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Random;
 
+import service.communication.AscomPagerMessageChannel;
+import service.communication.CommunicationHistory;
+import service.communication.Message;
+import service.communication.PagerReciever;
+import service.filter.FilterManager;
+import service.filter.FilterMessage;
+import service.model.FunctionalPerson;
+import service.model.Person;
+import service.model.Role;
+import service.model.Room;
+import service.model.Timestamp;
+import service.model.Urgency;
+
 
 import com.db4o.Db4oEmbedded;
 import com.db4o.ObjectContainer;
@@ -79,7 +92,7 @@ public class OrbitStamps
 		
 		
 		// INIT POLLER
-		poller = new DatabasePoll("ip", "usr", "pass");
+		poller = new DatabasePoll("ip", "usr", "pass", new HuddingeDataMapper());
 		poller.start();
 		
 		

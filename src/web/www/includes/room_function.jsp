@@ -1,10 +1,10 @@
-<%@ page import="service.Room" %>
-<%@ page import="service.Message" %>
-<%@ page import="service.CommunicationHistory" %>
-<%@ page import="service.Person" %>
-<%@ page import="service.FunctionalPerson" %>
+<%@ page import="service.model.Room" %>
+<%@ page import="service.communication.Message" %>
+<%@ page import="service.communication.CommunicationHistory" %>
+<%@ page import="service.model.Person" %>
+<%@ page import="service.model.FunctionalPerson" %>
 <%@ page import="java.util.Map.Entry" %>
-<%@ page import="service.Role" %>
+<%@ page import="service.model.Role" %>
 <%@ page import="service.OrbitStamps" %>
 
 <script type="text/javascript">

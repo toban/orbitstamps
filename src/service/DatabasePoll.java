@@ -2,6 +2,8 @@ package service;
 
 import java.util.ArrayList;
 
+import service.model.Timestamp;
+
 
 public class DatabasePoll extends Thread
 {
@@ -10,10 +12,12 @@ public class DatabasePoll extends Thread
 	public String password;
 	public boolean isActive = false;
 	public long pollInterval = 1000;
+	private DataMapper mapper;
 	static public ArrayList<Timestamp> newTimestamps;
 	
-	public DatabasePoll(String ip, String usr, String pass)
+	public DatabasePoll(String ip, String usr, String pass, DataMapper dm)
 	{
+		mapper = dm;
 		serverIP = ip;
 		serverUserName = usr;
 		password = pass;

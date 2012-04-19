@@ -1,11 +1,12 @@
 <%@ page import="service.OrbitStamps" %>
-<%@ page import="service.AscomPagerMessageChannel" %>
-<%@ page import="service.PagerReciever" %>
-<%@ page import="service.CommunicationHistory" %>
-<%@ page import="service.Message" %>
-<%@ page import="service.Urgency" %>
-<%@ page import="service.Person" %>
-<%@ page import="service.Room" %>
+<%@ page import="service.communication.AscomPagerMessageChannel" %>
+<%@ page import="service.communication.PagerReciever" %>
+<%@ page import="service.communication.CommunicationHistory" %>
+<%@ page import="service.communication.Message" %>
+<%@ page import="service.model.Urgency" %>
+<%@ page import="service.model.Person" %>
+<%@ page import="service.model.Room" %>
+
 <% 
 /*
 room = Integer.parseInt(request.getParameter("room"));
@@ -14,7 +15,9 @@ message = Integer.parseInt(request.getParameter("page"));
 */
 String[] recv = request.getParameterValues("recv[]");
 String roomID = request.getParameter("room");
+String callback = request.getParameter("callback");
 String strMessage = request.getParameter("msg");
+
 
 AscomPagerMessageChannel channel = new AscomPagerMessageChannel();
 Message msg = new Message(strMessage, 
