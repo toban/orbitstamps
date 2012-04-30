@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<config>
-	<database>
-		<ip></ip>
-		<user></user>
-		<password></password>
-	</database>
-</config>
