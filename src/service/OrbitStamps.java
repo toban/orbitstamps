@@ -102,24 +102,20 @@ public class OrbitStamps
 		
 		// Read filters
 		filterManager = new FilterManager();
-		
 		for(FilterMessage fm : filterManager.filters)
-		{
 				fm.printDebug();
-		}
 		
 		//INIT Rooms
 		operatingRooms = new HashMap<String, Room>();
-		
-
 		loadPersistantData();
 		listAllPersistant();
-		
-		createDummyData();
-		
+		// DUMMY
+		//createDummyData();
 		// INIT INTERFACE
-		server = new WebServer();
-		server.init(8080);
+		//server = new WebServer();
+		//server.init(8080);
+		
+		//log(LOG_NOTICE,"connect = " + poller.debugConnect());
 		
 		
 	}
