@@ -23,12 +23,17 @@ public class DatabasePoll extends Thread
 		password = pass;
 		isActive = true;
 	}
+	public boolean debugConnect()
+	{
+		return mapper.connect(serverUserName, password, serverIP);
+	}
     public void run() {
     	
     	while(isActive)
     	{
-        	OrbitStamps.log(OrbitStamps.LOG_NOTICE, "Polling database ... ");
-        	OrbitStamps.log(OrbitStamps.LOG_NOTICE, "Adding new timestamps to room ... ");
+        	//OrbitStamps.log(OrbitStamps.LOG_NOTICE, "Polling database ... ");
+        	//OrbitStamps.log(OrbitStamps.LOG_NOTICE, "Adding new timestamps to room ... ");
+    		mapper.mapToModel(null);
         	OrbitStamps.processRoomTimestamps();
         	
             synchronized (this) 
@@ -44,12 +49,4 @@ public class DatabasePoll extends Thread
     	}
     	
     }
-	public boolean connect()
-	{
-		return false;
-	}
-	public void getTimestamps()
-	{
-		
-	}
 }

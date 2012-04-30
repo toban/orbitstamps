@@ -5,6 +5,7 @@
 <%@ page import="service.communication.Message" %>
 <%@ page import="service.model.Urgency" %>
 <%@ page import="service.model.Person" %>
+<%@ page import="service.MsgQueueItem" %>
 <%@ page import="service.model.Room" %>
 
 <% 
@@ -41,16 +42,7 @@ for(String id : recv)
 		}
 		else
 		{
-			try {
-				Thread.sleep(500);
-			} catch (InterruptedException e) 
-			{
-				e.printStackTrace();
-			}
-			room.messageHistory.addFirst(new CommunicationHistory(msg, 
-															pr, 
-															CommunicationHistory.HISTORY_TYPE_MANUAL,
-															id));
+			OrbitStamps.msgQueue.add(new MsgQueueItem(room, p, msg, CommunicationHistory.HISTORY_TYPE_MANUAL));
 		}
 		//channel.sendMessage(msg,);
 		

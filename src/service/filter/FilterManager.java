@@ -33,6 +33,36 @@ public class FilterManager
 		OrbitStamps.log(OrbitStamps.LOG_NOTICE, "FilterManager Created!");
 		readFilters();
 	}
+	public String getBodyString(Element e, String tagName)
+	{
+		NodeList element = e.getElementsByTagName(tagName);
+		String ret = "";
+		if(element != null && element.getLength() > 0)
+		{
+			NodeList nl = element.item(0).getChildNodes();
+			
+			//Node n = 
+			//if(n!=null) // has value
+			//	ret = n.getNodeValue();
+			
+			for(int i = 0; i < nl.getLength(); i++)
+			{
+				//nl.item(i).getNodeName()
+				//if(nl.item(i).getNodeName().equals("#text"))
+				// keep xml structure
+				if(nl.item(i).getNodeValue() != null && nl.item(i).getNodeType() == Node.TEXT_NODE && nl.item(i).getNodeName().equals("#text"))
+				{
+					ret += nl.item(i).getNodeValue();
+				}
+				else
+				{
+						ret += "<" + nl.item(i).getNodeName() + "/>";
+				}
+					
+			}
+		}
+		return (ret != null) ? ret : "";
+	}
 	public String getElementString(Element e, String tagName)
 	{
 		NodeList element = e.getElementsByTagName(tagName);
@@ -84,7 +114,7 @@ public class FilterManager
 			
 			try
 			{
-				body = getElementString(dataEl,"body");
+				body = getBodyString(dataEl,"body");
 				callback = getElementString(dataEl,"callback");
 				signal = Integer.parseInt(getElementString(dataEl,"signal"));
 				urgency = Integer.parseInt(getElementString(dataEl,"urgency"));

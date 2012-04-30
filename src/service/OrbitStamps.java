@@ -33,6 +33,7 @@ public class OrbitStamps
 	
 	static private WebServer server;
 	static public DatabasePoll poller;
+	static public MsgQueue msgQueue;
 	
 	public static boolean LOG_TO_FILE = false;
 	static private FileWriter fs;
@@ -95,6 +96,9 @@ public class OrbitStamps
 		poller = new DatabasePoll("ip", "usr", "pass", new HuddingeDataMapper());
 		poller.start();
 		
+		// INIT MSG-QUEUE
+		msgQueue = new MsgQueue();
+		msgQueue.start();
 		
 		// Read filters
 		filterManager = new FilterManager();
@@ -107,20 +111,7 @@ public class OrbitStamps
 		//INIT Rooms
 		operatingRooms = new HashMap<String, Room>();
 		
-		operatingRooms.put("1234", new Room("1234"));
-	    /*
-		Person p = new FunctionalPerson("Funktion",new Role(Role.ROLE_FUNKTION),"123", "1234");
-	    p.devices.add(new PagerReciever("1234"));
-		ObjectContainer db = Db4oEmbedded.openFile(Db4oEmbedded.newConfiguration(), DATABASE_PERSON_FILEPATH);
-		
-		try {
-	    db.store(p);
-		}
-		finally
-		{
-			db.close();
-		}
-		*/
+
 		loadPersistantData();
 		listAllPersistant();
 		
@@ -140,7 +131,6 @@ public class OrbitStamps
 		ObjectContainer db = Db4oEmbedded.openFile(Db4oEmbedded.newConfiguration(), DATABASE_PERSON_FILEPATH);
 		try {
 
-			//ObjectSet<Object> result = db.queryByExample(Person.class);
 			ObjectSet<FunctionalPerson> result = db.queryByExample(FunctionalPerson.class); // load all rooms with persistant data
 			for(FunctionalPerson function : result)
 			{
@@ -292,11 +282,8 @@ public class OrbitStamps
 								// if the room, person, and timestamp is ok, its a match
 								if(fm.match(room, person))
 								{
-									// TODO: should go through some interface ...
-									room.messageHistory.addFirst(new CommunicationHistory(fm.msg, 
-																				person.devices.iterator().next(),
-																				CommunicationHistory.HISTORY_TYPE_AUTO,
-																				person.ID));
+									
+									msgQueue.add(new MsgQueueItem(room, person, fm.msg, CommunicationHistory.HISTORY_TYPE_AUTO));
 									
 									log(OrbitStamps.LOG_NOTICE, "!!! Match found " + person.name + " role= " + person.role.getRole() + " room= " + room.roomID);
 								}
@@ -314,14 +301,6 @@ public class OrbitStamps
 			}
 			
 		}
-	}
-	public static void testMessage()
-	{
-		//Test Message
-		AscomPagerMessageChannel channel = new AscomPagerMessageChannel();
-		PagerReciever pager = new PagerReciever("7491");
-		Message msg = new Message("hello world", Urgency.LEVEL_IMPORTANT, AscomPagerMessageChannel.MESSAGE_BEEP_SIGNAL);
-		channel.sendMessage(msg,pager);
 	}
 	public static void log(int type, String s)
 	{

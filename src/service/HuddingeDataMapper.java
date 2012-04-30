@@ -7,5 +7,15 @@ public class HuddingeDataMapper extends DataMapper {
 	{
 
 	}
+	@Override
+	public boolean connect(String username, String userpass, String ip) 
+	{
+		return false;
+	}
+	@Override
+	public boolean isConnected() 
+	{
+		return false;
+	}
 
 }
