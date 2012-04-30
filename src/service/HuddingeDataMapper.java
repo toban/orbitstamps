@@ -19,9 +19,7 @@ public class HuddingeDataMapper extends DataMapper {
 			Connection conn;
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver").newInstance();
 			String url = "jdbc:sqlserver://"+Config.DATABASE_IP+":"+Config.DATABASE_PORT+";databaseName=Narda";
-			
-			
-			
+	
 			conn = DriverManager.getConnection(url, Config.DATABASE_USERNAME, Config.DATABASE_PASSWORD);
 			
 			Statement stmnt = conn.createStatement();

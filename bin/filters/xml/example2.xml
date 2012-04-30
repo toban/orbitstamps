@@ -5,11 +5,11 @@
 		<callback>123abc</callback>
 		<signal>2</signal>
 		<urgency>5</urgency>
-		<body>Patienten har anlänt sal</body>
+		<body>Patienten har anlänt sal <room-name/></body>
 	</data>
 	<filter timestamp="10">
 		<role>Ssk ane</role>
-		<room>1</room>
+		<room>2</room>
 		<max-delay>10</max-delay>
 	</filter>
 </message>

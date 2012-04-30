@@ -115,12 +115,12 @@ public class OrbitStamps
 		loadPersistantData();
 		listAllPersistant();
 		// DUMMY
-		//createDummyData();
+		createDummyData();
 		// INIT INTERFACE
 		//server = new WebServer();
 		//server.init(8080);
 		
-		log(LOG_NOTICE,"connect = " + poller.debugConnect());
+		//log(LOG_NOTICE,"connect = " + poller.debugConnect());
 		}
 		
 	}

@@ -29,14 +29,15 @@ public class MsgQueue extends Thread
     	{
     		if(msgObjects.size() > 0)
     		{
-    		OrbitStamps.log(OrbitStamps.LOG_NOTICE, "Sending Message ... ");
-    		MsgQueueItem item = msgObjects.pop();
     		
+    		MsgQueueItem item = msgObjects.pop();
+    		item.parseBody();
     		item.room.messageHistory.addFirst(new CommunicationHistory(item.msg, 
 					item.person.devices.iterator().next(),
 					item.msgType,
 					item.person.ID));
 
+    		OrbitStamps.log(OrbitStamps.LOG_NOTICE, "Sending Message ... " + item.msg.getBody());
     		item = null;
 
     		}

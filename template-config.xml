@@ -4,5 +4,7 @@
 		<ip></ip>
 		<user></user>
 		<password></password>
+		<port></port>
+		<name></name>
 	</database>
 </config>
