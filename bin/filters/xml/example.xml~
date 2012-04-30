@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!DOCTYPE message SYSTEM "schema/message.dtd">
+<message>
+	<data>
+		<callback>123abc</callback>
+		<signal>2</signal>
+		<urgency>5</urgency>
+		<body>Test test 123<room-name/></body>
+	</data>
+	<filter timestamp="10">
+		<role>Ssk ane</role>
+		<room>1</room>
+		<max-delay>10</max-delay>
+	</filter>
+</message>
