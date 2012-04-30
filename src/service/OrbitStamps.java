@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Random;
 
+import org.apache.commons.logging.Log;
+
 import service.communication.AscomPagerMessageChannel;
 import service.communication.CommunicationHistory;
 import service.communication.Message;
@@ -91,9 +93,12 @@ public class OrbitStamps
 		
 		log(LOG_NOTICE, "Starting application " + cal.getTime());
 		
+		//LOAD CONFIG
+		if(loadConfig())
+		{
 		
 		// INIT POLLER
-		poller = new DatabasePoll("ip", "usr", "pass", new HuddingeDataMapper());
+		poller = new DatabasePoll(new HuddingeDataMapper());
 		poller.start();
 		
 		// INIT MSG-QUEUE
@@ -115,8 +120,8 @@ public class OrbitStamps
 		//server = new WebServer();
 		//server.init(8080);
 		
-		//log(LOG_NOTICE,"connect = " + poller.debugConnect());
-		
+		log(LOG_NOTICE,"connect = " + poller.debugConnect());
+		}
 		
 	}
 	
@@ -296,6 +301,20 @@ public class OrbitStamps
 				}
 			}
 			
+		}
+	}
+	public static boolean loadConfig()
+	{
+		ConfigLoader cl = new ConfigLoader();
+		if(cl.readConfig())
+		{
+			log(LOG_NOTICE, "Loaded config!!");
+			return true;
+		}
+		else
+		{
+			log(LOG_ERROR, "Could not load config!");
+			return false;
 		}
 	}
 	public static void log(int type, String s)

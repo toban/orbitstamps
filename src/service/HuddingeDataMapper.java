@@ -11,20 +11,18 @@ public class HuddingeDataMapper extends DataMapper {
 		
 	}
 	@Override
-	public boolean connect(String username, String userpass, String ip) 
+	public boolean connect() 
 	{
 
-
-		
 	    try
 	    {
 			Connection conn;
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver").newInstance();
-			String url = "jdbc:sqlserver://"+ip+";databaseName=Narda";
+			String url = "jdbc:sqlserver://"+Config.DATABASE_IP+":"+Config.DATABASE_PORT+";databaseName=Narda";
 			
 			
 			
-			conn = DriverManager.getConnection(url, username, userpass);
+			conn = DriverManager.getConnection(url, Config.DATABASE_USERNAME, Config.DATABASE_PASSWORD);
 			
 			Statement stmnt = conn.createStatement();
 			String strQuery = "select top 10 * from NarDa.dbo.v_OrbitNardaSms";

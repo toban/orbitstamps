@@ -7,25 +7,20 @@ import service.model.Timestamp;
 
 public class DatabasePoll extends Thread
 {
-	public String serverIP;
-	public String serverUserName;
-	public String password;
+
 	public boolean isActive = false;
 	public long pollInterval = 1000;
 	private DataMapper mapper;
 	static public ArrayList<Timestamp> newTimestamps;
 	
-	public DatabasePoll(String ip, String usr, String pass, DataMapper dm)
+	public DatabasePoll(DataMapper dm)
 	{
 		mapper = dm;
-		serverIP = ip;
-		serverUserName = usr;
-		password = pass;
 		isActive = true;
 	}
 	public boolean debugConnect()
 	{
-		return mapper.connect(serverUserName, password, serverIP);
+		return mapper.connect();
 	}
     public void run() {
     	
