@@ -19,8 +19,6 @@ String roomID = request.getParameter("room");
 String callback = request.getParameter("callback");
 String strMessage = request.getParameter("msg");
 
-
-AscomPagerMessageChannel channel = new AscomPagerMessageChannel();
 Message msg = new Message(strMessage, 
 					Urgency.LEVEL_IMPORTANT, 
 					AscomPagerMessageChannel.MESSAGE_BEEP_SIGNAL);
@@ -35,7 +33,7 @@ for(String id : recv)
 		continue;
 	else
 	{
-		PagerReciever pr = (PagerReciever) p.getDeviceCompatibleWith(channel);
+		PagerReciever pr = (PagerReciever) p.getDeviceCompatibleWith(OrbitStamps.DEFAULT_CHANNEL);
 		if(pr==null)
 		{
 			continue;
@@ -44,7 +42,6 @@ for(String id : recv)
 		{
 			OrbitStamps.msgQueue.add(new MsgQueueItem(room, p, msg, CommunicationHistory.HISTORY_TYPE_MANUAL));
 		}
-		//channel.sendMessage(msg,);
 		
 	}
 }

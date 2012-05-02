@@ -1,4 +1,5 @@
 <%@ page import="service.OrbitStamps" %>
+<%@ page import="service.Config" %>
 <!-- Service start -->
 <div>
 <div>
@@ -15,7 +16,7 @@
 <div>
 <div>
 	<h1>Databas</h1>
-	<%= OrbitStamps.poller.serverUserName %>@<%= OrbitStamps.poller.serverIP %>
+	<%= Config.DATABASE_NAME %>@<%= Config.DATABASE_IP %>
 </div>
 
 <div>

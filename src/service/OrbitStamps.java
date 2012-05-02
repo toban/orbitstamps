@@ -14,6 +14,7 @@ import org.apache.commons.logging.Log;
 import service.communication.AscomPagerMessageChannel;
 import service.communication.CommunicationHistory;
 import service.communication.Message;
+import service.communication.MessageChannel;
 import service.communication.PagerReciever;
 import service.filter.FilterManager;
 import service.filter.FilterMessage;
@@ -44,6 +45,8 @@ public class OrbitStamps
 	
 	static public FilterManager filterManager;
 	static public HashMap<String,Room> operatingRooms;
+	
+	static public MessageChannel DEFAULT_CHANNEL = new AscomPagerMessageChannel();
 	
 	public static final String DIR_XML_FILTERS = "filters/xml";
 	static public final int LOG_ERROR = 0;
@@ -117,8 +120,8 @@ public class OrbitStamps
 		// DUMMY
 		createDummyData();
 		// INIT INTERFACE
-		//server = new WebServer();
-		//server.init(8080);
+		server = new WebServer();
+		server.init(8080);
 		
 		//log(LOG_NOTICE,"connect = " + poller.debugConnect());
 		}

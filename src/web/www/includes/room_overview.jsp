@@ -277,9 +277,9 @@ else
 			<table class="timeline-table">
 			<tr class="timeline-row">
 			<td class="timeline-cell" style="background-color: #F0A;"><a title="tidpunkt" href="#">PREOP</a></td>
-			<td class="timeline-cell" style="background-color: #FAA;"><a title="tidpunkt" href="#">ANST</a></td>
-			<td class="timeline-cell" style="background-color: #3AA;"><a title="tidpunkt" href="#">ANST</a></td>
-			<td class="timeline-cell" style="background-color: #CA0;"><a title="tidpunkt" href="#">ANST</a></td>
+			<td class="timeline-cell" style="background-color: #FAA;"><a title="tidpunkt" href="#">RINGT AVD</a></td>
+			<td class="timeline-cell" style="background-color: #3AA;"><a title="tidpunkt" href="#">ANLÄNT OPSAL</a></td>
+			<td class="timeline-cell" style="background-color: #CA0;"><a title="tidpunkt" href="#">PATIENT START</a></td>
 			<td class="timeline-cell last-element" style="width: 50%"></td>
 			</tr>
 			</table>
