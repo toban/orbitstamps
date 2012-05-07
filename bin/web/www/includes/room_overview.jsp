@@ -4,8 +4,26 @@
 <%@ page import="service.model.Person" %>
 <%@ page import="java.util.Map.Entry" %>
 <%@ page import="service.OrbitStamps" %>
+<%@ page import="service.communication.MessageChannel" %>
 
 <script type="text/javascript">
+
+var statusHTML = function(status)
+{
+	switch(status)
+	{
+	case <%= MessageChannel.MSG_STATUS_SENT  %>:
+		return '<span class="msg-status" style="background: #0F0;">Skickat</span>';
+	case <%= MessageChannel.MSG_STATUS_FAILED  %>:
+		return '<span class="msg-status" style="background: #F00;">Misslyckades</span>';
+	case <%= MessageChannel.MSG_STATUS_NO_COMPATIBLE_DEVICE  %>:
+		return '<span class="msg-status" style="background: #F00;">Ingen kompatibel mottagare</span>';
+	case <%= MessageChannel.MSG_STATUS_RECIEVED  %>:
+		return '<span class="msg-status" style="background: #0F0;">Mottaget</span>';
+	}
+	return 'Okänd status';
+}
+
 $(document).ready(function()
 		{
 			var createNewMessage = true;
@@ -27,7 +45,7 @@ $(document).ready(function()
 					    	 	if($.inArray(item.uuid,msgHistory) == -1)
 					    	 		{
 					    	 			msgHistory.push(item.uuid)
-										var htmlItem = $("<tr class='row history'><td class='cell'>"+item.time+"</td><td class='cell'>"+item.type+"</td><td class='cell personID'>"+item.personID+"</td><td class='cell'>"+item.recvNumber+"</td><td class='cell smallText'>"+item.body+"</td><td class='cell'>"+item.status+"</td></tr>");
+										var htmlItem = $("<tr class='row history'><td class='cell'>"+item.time+"</td><td class='cell'>"+item.type+"</td><td class='cell personID'>"+item.personID+"</td><td class='cell'>"+item.recvNumber+"</td><td class='cell smallText'>"+item.body+"</td><td class='cell'>"+statusHTML(item.status)+"</td></tr>");
 					    	 			$("#history-table-container .table .header-row").after(htmlItem);
 					    	 			htmlItem.hide();
 					    	 			htmlItem.fadeIn();

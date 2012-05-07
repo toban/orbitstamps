@@ -39,10 +39,11 @@ public class AscomPagerMessageChannel implements MessageChannel {
 	
 	public AscomPagerMessageChannel()
 	{
-		formURL = "http://10.48.64.26/cgi-bin/npcgi";
+		//formURL = "http://10.48.64.26/cgi-bin/npcgi";
+		formURL = "http://kthx.pl/test/";
 	}
 	@Override
-	public boolean sendMessage(Message msg, MessageReciever recv)
+	public int sendMessage(Message msg, MessageReciever recv)
 	{
 		OrbitStamps.log(OrbitStamps.LOG_NOTICE, "Sending message to " + recv.number);
 		try{
@@ -60,9 +61,7 @@ public class AscomPagerMessageChannel implements MessageChannel {
 			HttpURLConnection.setFollowRedirects(false);
 			conn = (HttpURLConnection) url.openConnection();
 			
-		
-			
-			//System.out.println(url.toString());
+
 			conn.connect();
 			Map<String,List<String>> map = conn.getHeaderFields();
 			conn.disconnect();
@@ -73,12 +72,12 @@ public class AscomPagerMessageChannel implements MessageChannel {
 			{
 				System.out.println(val + ": " + map.get(val));
 			}
-			return true;
+			return MessageChannel.MSG_STATUS_SENT;
 		}
 		catch(IOException ex)
 		{
 			ex.printStackTrace();
-			return false;
+			return MessageChannel.MSG_STATUS_FAILED;
 		}
 	}
 

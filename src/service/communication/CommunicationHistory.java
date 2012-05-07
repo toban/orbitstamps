@@ -17,10 +17,10 @@ public class CommunicationHistory
 	public final static int HISTORY_TYPE_AUTO = 0;
 	public final static int HISTORY_TYPE_MANUAL = 1;
 	
-	public CommunicationHistory(Message msg, MessageReciever recv, int type, String personID)
+	public CommunicationHistory(Message msg, MessageReciever recv, int type, String personID, int status)
 	{
 		this.uuid = UUID.randomUUID();
-		this.status = 1;
+		this.status = status;
 		this.personID = personID;
 		this.type = type;
 		this.msg = msg;

@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -48,6 +49,8 @@ public class OrbitStamps
 	
 	static public MessageChannel DEFAULT_CHANNEL = new AscomPagerMessageChannel();
 	
+	static public ArrayList<MessageChannel> channels = new ArrayList<MessageChannel>();
+	
 	public static final String DIR_XML_FILTERS = "filters/xml";
 	static public final int LOG_ERROR = 0;
 	static public final int LOG_NOTICE = 0;
@@ -57,8 +60,13 @@ public class OrbitStamps
 	
 	static public final String[] STATIC_TEMPLATE_MESSAGES = {"Patienten har anlänt PREOP", 
 															"Patienten har anlänt på sal",
-															"Anestesi påbörjad"};
-	
+															"Anestesi påbörjad",
+															"Anestesi inledning klar",
+															"Klart för operation",
+															"Operation har påbörjats",
+															"Operation avslutad",
+															"Anestesi avslutad"};
+
 	public static void main(String [] args)
 	{	
 		cal = Calendar.getInstance();
@@ -99,6 +107,9 @@ public class OrbitStamps
 		//LOAD CONFIG
 		if(loadConfig())
 		{
+			
+			channels.add(DEFAULT_CHANNEL);
+			
 		
 		// INIT POLLER
 		poller = new DatabasePoll(new HuddingeDataMapper());
@@ -123,6 +134,13 @@ public class OrbitStamps
 		server = new WebServer();
 		server.init(8080);
 		
+		
+		AscomPagerMessageChannel channel = new AscomPagerMessageChannel();
+		PagerReciever pr = new PagerReciever("1234");
+		Message msg = new Message("hello!", 1, 3);
+		channel.sendMessage(msg, pr);
+			
+			
 		//log(LOG_NOTICE,"connect = " + poller.debugConnect());
 		}
 		

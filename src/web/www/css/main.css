@@ -8,6 +8,12 @@ body
 	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
     font-weight: 300;
 }
+.msg-status
+{
+	border-radius: 5px;
+	color: #333;
+	padding: 2px;
+}
 .smallText
 {
 	font-size: 12px;
@@ -189,6 +195,7 @@ label
 	border-right:10px solid #9966FF;
 }
 /* ROLE END */
+
 /* timeline-start */
 .last-element
 {
