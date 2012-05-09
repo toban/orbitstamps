@@ -1,6 +1,7 @@
 package service.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 import service.OrbitStamps;
@@ -9,14 +10,16 @@ import service.communication.CommunicationHistory;
 
 public class Room 
 {
-	public String roomID;
+	public String roomID, roomName, locationName, locationID;
 	private ArrayList<Person> people;
+	public HashMap<String,Operation> operations;
 	public ArrayList<Timestamp> newStamps;
 	public LinkedList<CommunicationHistory> messageHistory;
 	
 	public Room(String roomID)
 	{
 		this.newStamps = new ArrayList<Timestamp>();
+		this.operations = new HashMap<String, Operation>();
 		this.messageHistory = new LinkedList<CommunicationHistory>();
 		this.setPeople(new ArrayList<Person>());
 		this.roomID = roomID;

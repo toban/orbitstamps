@@ -4,7 +4,9 @@
 <%@ page import="service.model.Person" %>
 <%@ page import="java.util.Map.Entry" %>
 <%@ page import="service.OrbitStamps" %>
+<%@ page import="service.model.Operation" %>
 <%@ page import="service.communication.MessageChannel" %>
+<%@ page import="java.util.Map.Entry" %>
 
 <script type="text/javascript">
 
@@ -29,6 +31,22 @@ $(document).ready(function()
 			var createNewMessage = true;
 			var newMsgRecv = new Array();
 			var msgHistory = new Array();
+			
+			var drawTimeOperationOverview = function(operationID)
+			{
+				$.post("includes/functions/getOperationTimestamps.jsp", {opID: operationID, room: <%= roomID %>},
+						   function(data) 
+						   {
+							console.log(data);
+						   });	
+			}
+			$("#operations").change(function()
+					{
+						var selectedOperation = $("#operations option:selected").val();
+						drawTimeOperationOverview(selectedOperation);
+						
+					});
+			
 			/* updating the history */
 			var historyUpdate = function()
 			{
@@ -305,8 +323,19 @@ else
 		</div>
 		<a href="#" title="Dölj/visa operationsflödet" id="timeline-mini-button">&uarr;&darr;</a>
 		</div>
-		<div id="content">		
-		<h1>Sal <%= room.roomID %></h1>
+		<div id="content">
+		<div>
+		<form action="">
+		<select name="operations" id="operations">
+		<% for(Entry<String, Operation> opEntry : room.operations.entrySet()) { 
+		Operation op = opEntry.getValue();
+		%>
+		<option value="<%= op.op_id %>"><%= op.op_id %></option>
+		<% } %>
+		</select>
+		</form>
+		</div>		
+		<h1>Sal <%= room.roomName %></h1>
 		
 		<!-- new message start -->
 		<div id="create-message-container">

@@ -21,10 +21,10 @@ body
 /* room */
 .room-overview-container
 {
-	display: inline-block;
+	display: block;
 	padding: 10px;
-	width: 100px;
-	height: 100px;
+	width: auto;
+	height: 20px;
 	border: 5px solid #555;
 	margin: 5px;
 }
@@ -186,7 +186,7 @@ label
 {
 	border-right: 10px solid #99FF66;
 }
-.Ssk-op
+.Ssk-op	
 {
 	border-right: 10px solid #6699FF;
 }

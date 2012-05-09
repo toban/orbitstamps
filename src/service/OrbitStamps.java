@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 
@@ -50,6 +51,7 @@ public class OrbitStamps
 	static public MessageChannel DEFAULT_CHANNEL = new AscomPagerMessageChannel();
 	
 	static public ArrayList<MessageChannel> channels = new ArrayList<MessageChannel>();
+	public static Map<String, Integer> stampStringToOrder = new HashMap<String, Integer>();
 	
 	public static final String DIR_XML_FILTERS = "filters/xml";
 	static public final int LOG_ERROR = 0;
@@ -75,6 +77,19 @@ public class OrbitStamps
 												+ "_" + cal.get(Calendar.HOUR_OF_DAY)
 												+ "" + cal.get(Calendar.MINUTE)
 												+ "" + cal.get(Calendar.SECOND);
+		stampStringToOrder.put("Ringt avd", 1);
+		stampStringToOrder.put("Anlänt op", 2);
+		stampStringToOrder.put("Patienttid -start", 3);
+		stampStringToOrder.put("Förberedelser enl. WHO", 4);
+		stampStringToOrder.put("Anestesi -start", 5);
+		stampStringToOrder.put("Anestesiinledning klar", 6);
+		stampStringToOrder.put("Klart för operatör", 7);
+		stampStringToOrder.put("Time out", 8);
+		stampStringToOrder.put("Operation -start", 9);
+		stampStringToOrder.put("Operation -slut", 10);
+		stampStringToOrder.put("Avslutning enl.WHO", 11);
+		stampStringToOrder.put("Anestesi -slut", 12);
+		stampStringToOrder.put("Patienttid -slut", 13);
 		
 		System.out.println(filename);
 		
@@ -110,11 +125,14 @@ public class OrbitStamps
 			
 			channels.add(DEFAULT_CHANNEL);
 			
+		//INIT Rooms
+		operatingRooms = new HashMap<String, Room>();
 		
 		// INIT POLLER
 		poller = new DatabasePoll(new HuddingeDataMapper());
-		poller.start();
-		
+		poller.debugConnect();
+		//poller.start();
+		/*
 		// INIT MSG-QUEUE
 		msgQueue = new MsgQueue();
 		msgQueue.start();
@@ -124,22 +142,23 @@ public class OrbitStamps
 		for(FilterMessage fm : filterManager.filters)
 				fm.printDebug();
 		
-		//INIT Rooms
-		operatingRooms = new HashMap<String, Room>();
+	
 		loadPersistantData();
 		listAllPersistant();
 		// DUMMY
 		createDummyData();
+		*/
 		// INIT INTERFACE
 		server = new WebServer();
 		server.init(8080);
 		
 		
+		/*
 		AscomPagerMessageChannel channel = new AscomPagerMessageChannel();
 		PagerReciever pr = new PagerReciever("1234");
 		Message msg = new Message("hello!", 1, 3);
 		channel.sendMessage(msg, pr);
-			
+			*/
 			
 		//log(LOG_NOTICE,"connect = " + poller.debugConnect());
 		}

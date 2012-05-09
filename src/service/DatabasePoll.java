@@ -20,7 +20,9 @@ public class DatabasePoll extends Thread
 	}
 	public boolean debugConnect()
 	{
-		return mapper.connect();
+		boolean val =  mapper.connect();
+		mapper.disconnect();
+		return val;
 	}
     public void run() {
     	

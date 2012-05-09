@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config>
+	<database>
+		<ip></ip>
+		<user></user>
+		<password></password>
+		<port></port>
+		<name></name>
+		<personal-data></personal-data>
+		<event-data></event-data>
+		<operation-data></operation-data>
+	</database>
+</config>

@@ -44,7 +44,7 @@ public class MsgQueue extends Thread
     			if(useDevice == null)
     				status = MessageChannel.MSG_STATUS_NO_COMPATIBLE_DEVICE;
     			else
-    				status = channel.sendMessage(item.msg, useDevice);
+    				status = 1;//channel.sendMessage(item.msg, useDevice);
     			
     		}
     		

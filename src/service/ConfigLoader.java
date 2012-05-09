@@ -72,10 +72,16 @@ public class ConfigLoader
 				Config.DATABASE_USERNAME = getElementString(dataEl,"user");
 				Config.DATABASE_PASSWORD = getElementString(dataEl,"password");
 				Config.DATABASE_PORT = getElementString(dataEl,"port");
+				Config.DATABASE_OPERATION_VIEW = getElementString(dataEl,"operation-data");
+				Config.DATABASE_PERSONAL_VIEW = getElementString(dataEl,"personal-data");
+				Config.DATABASE_EVENT_VIEW = getElementString(dataEl,"event-data");
 				
 				OrbitStamps.log(OrbitStamps.LOG_NOTICE, "ConfigLoader: db: " + Config.DATABASE_NAME);
 				OrbitStamps.log(OrbitStamps.LOG_NOTICE, "ConfigLoader: db-ip: " + Config.DATABASE_IP);
 				OrbitStamps.log(OrbitStamps.LOG_NOTICE, "ConfigLoader: db-username: " + Config.DATABASE_USERNAME);
+				OrbitStamps.log(OrbitStamps.LOG_NOTICE, "ConfigLoader: db-event-view: " + Config.DATABASE_EVENT_VIEW);
+				OrbitStamps.log(OrbitStamps.LOG_NOTICE, "ConfigLoader: db-personal-view: " + Config.DATABASE_PERSONAL_VIEW);
+				OrbitStamps.log(OrbitStamps.LOG_NOTICE, "ConfigLoader: db-operation-view: " + Config.DATABASE_OPERATION_VIEW);
 				OrbitStamps.log(OrbitStamps.LOG_NOTICE, "ConfigLoader: db-port: " + Config.DATABASE_PORT);
 				return true;
 			}

@@ -6,5 +6,8 @@
 		<password></password>
 		<port></port>
 		<name></name>
+		<personal-data></personal-data>
+		<event-data></event-data>
+		<operation-data></operation-data>
 	</database>
 </config>

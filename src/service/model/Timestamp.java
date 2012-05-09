@@ -1,13 +1,15 @@
 package service.model;
 
 import java.util.Calendar;
+import java.util.Date;
 
 
 
 public class Timestamp 
 {
-	public Calendar time;
+	public Date time;
 	public String stamp;
+	public String stringStamp;
 	
 	public Timestamp(String s)
 	{
@@ -16,7 +18,6 @@ public class Timestamp
 	public boolean equals(Object obj)
 	{
 		Timestamp castobj = (Timestamp)obj;
-		//System.out.println("comparison");
 		return stamp.equals(castobj.stamp);
 	}
 	
