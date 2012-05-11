@@ -7,9 +7,9 @@
 		<urgency>5</urgency>
 		<body>Patienten har anlänt sal <room-name/></body>
 	</data>
-	<filter timestamp="10">
+	<filter timestamp="2">
 		<role>Ssk ane</role>
-		<room>1</room>
+		<room>all</room>
 		<max-delay>10</max-delay>
 	</filter>
 </message>

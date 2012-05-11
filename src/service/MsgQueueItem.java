@@ -50,6 +50,7 @@ public class MsgQueueItem
 			String nodeName = list.item(i).getNodeName();
 			if(nodeName == "#text")
 				sb.append(list.item(i).getNodeValue());
+			
 			else if(nodeName == "room-name")
 			{
 				sb.append(room.roomID);

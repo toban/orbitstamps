@@ -10,6 +10,7 @@ public class Timestamp
 	public Date time;
 	public String stamp;
 	public String stringStamp;
+	public boolean parsed = false;
 	
 	public Timestamp(String s)
 	{

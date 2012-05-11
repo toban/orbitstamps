@@ -15,13 +15,14 @@ catch(Exception e)
 <%@ include file="includes/header.jsp" %>
 <div id="menu">
 <ul>
-	<li><a href="?page=0">Start</a></li>
-	<li><a href="?page=1">Välj sal</a></li>
+	<li class="li-nav"><a class="nav" href="?page=0">Start</a></li>
+	<li class="li-nav"><a class="nav" href="?page=1">Välj sal</a></li>
 	<% if(pageID == 2) { %>
-	<li><a href="?page=3&amp;room=<%= roomID %>" id="add-room-function">Hantera funktion på sal</a></li>
+	<li class="li-nav"><a class="nav" href="?page=3&amp;room=<%= roomID %>" id="add-room-function">Hantera funktion på sal</a></li>
+	<li class="li-select"><form action=""><select name="operations" id="operations"></select></form></li>
 	<% } %>
 	<% if(pageID == 3) { %>
-	<li><a href="?page=2&amp;room=<%= roomID %>">Tillbaka till sal</a></li>
+	<li class="li-nav"><a class="nav" href="?page=2&amp;room=<%= roomID %>">Tillbaka till sal</a></li>
 	<% } %>
 </ul>
 <div id="search">Sök<input type="text" name="search" id="search-field" /></div>
@@ -40,7 +41,7 @@ case 2:
 	%><%@include file="includes/room_overview.jsp" %><%
 	break;
 case 3:
-	%><%@include file="includes/room_function.jsp" %><%
+%><%@include file="includes/room_function.jsp" %><%
 	break;
 default:
 	%><%@include file="includes/service_overview.jsp" %><%

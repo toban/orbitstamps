@@ -4,14 +4,15 @@
 <%@ page import="java.util.Map.Entry" %>
 <%@ page import="service.OrbitStamps" %>
 {
-"rooms":  [
+"stamps":  [
 <%
 boolean isFirst = true;
 
 String roomID = request.getParameter("room");
 String operationID = request.getParameter("opID");
 
-if(roomID != null && operationID != null && !operationID.isEmpty() && !roomID.isEmpty() && OrbitStamps.operatingRooms.containsKey(roomID) 
+if(roomID != null && operationID != null && !operationID.isEmpty() 
+	&& !roomID.isEmpty() && OrbitStamps.operatingRooms.containsKey(roomID) 
 	&& OrbitStamps.operatingRooms.get(roomID).operations.containsKey(operationID))
 {
 	Room room = OrbitStamps.operatingRooms.get(roomID);
@@ -29,8 +30,9 @@ if(roomID != null && operationID != null && !operationID.isEmpty() && !roomID.is
 		}
 		%>
 		{
-		"order" : "<%= "1" %>",
-		"time" : "<%= "2012-05-07 13:22:00"/*ts.time*/ %>"
+		"order" : "<%= ts.stamp %>",
+		"name" : "<%= ts.stringStamp %>",
+		"time" : "<%= ts.time %>"
 		}
 	<%
 	}

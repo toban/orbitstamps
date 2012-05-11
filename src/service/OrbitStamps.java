@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 
@@ -21,6 +22,7 @@ import service.communication.PagerReciever;
 import service.filter.FilterManager;
 import service.filter.FilterMessage;
 import service.model.FunctionalPerson;
+import service.model.Operation;
 import service.model.Person;
 import service.model.Role;
 import service.model.Room;
@@ -130,9 +132,10 @@ public class OrbitStamps
 		
 		// INIT POLLER
 		poller = new DatabasePoll(new HuddingeDataMapper());
-		poller.debugConnect();
-		//poller.start();
-		/*
+		poller.updateData(DataMapper.DATATYPE_ALL);
+		//createDummyPeople(); // debug
+		poller.start();
+		
 		// INIT MSG-QUEUE
 		msgQueue = new MsgQueue();
 		msgQueue.start();
@@ -142,23 +145,19 @@ public class OrbitStamps
 		for(FilterMessage fm : filterManager.filters)
 				fm.printDebug();
 		
-	
+		
 		loadPersistantData();
 		listAllPersistant();
+		/*
 		// DUMMY
 		createDummyData();
 		*/
+		
+		
+		
 		// INIT INTERFACE
 		server = new WebServer();
 		server.init(8080);
-		
-		
-		/*
-		AscomPagerMessageChannel channel = new AscomPagerMessageChannel();
-		PagerReciever pr = new PagerReciever("1234");
-		Message msg = new Message("hello!", 1, 3);
-		channel.sendMessage(msg, pr);
-			*/
 			
 		//log(LOG_NOTICE,"connect = " + poller.debugConnect());
 		}
@@ -177,9 +176,9 @@ public class OrbitStamps
 			{
 				if(operatingRooms.containsKey(function.roomID))
 				{
-					if(operatingRooms.get(function.roomID).getPerson(function.ID) == null)
+					if(operatingRooms.get(function.roomID).getPersistantPerson(function.ID) == null)
 					{
-						operatingRooms.get(function.roomID).addPerson(function);
+						operatingRooms.get(function.roomID).addPersistantPerson(function);
 					}
 				}
 			}
@@ -194,13 +193,13 @@ public class OrbitStamps
 		if(room == null)
 			return;
 		
-		Person p  = room.getPerson(id);
+		Person p  = room.getPersistantPerson(id);
 		if(p==null)
 			return;
 		
 		if(p instanceof FunctionalPerson)
 		{
-			room.deletePerson(p);
+			room.deletePersistantPerson(p);
 			// Setup DB4o 
 			ObjectContainer db = Db4oEmbedded.openFile(Db4oEmbedded.newConfiguration(), DATABASE_PERSON_FILEPATH);
 			try {
@@ -241,7 +240,7 @@ public class OrbitStamps
 			{
 				Room room = entry.getValue();
 				
-				for(Person p : room.getPeople())
+				for(Person p : room.getPersistantPersons())
 				{
 					if(p instanceof FunctionalPerson)
 					{
@@ -263,6 +262,7 @@ public class OrbitStamps
 		    db.close();
 		}
 	}
+	/*
 	public static void createDummyData()
 	{
 		int numppl = 10;
@@ -300,6 +300,36 @@ public class OrbitStamps
 			operatingRooms.get(rum).newStamps.add(new Timestamp(Integer.toString(rand.nextInt(11))));
 		}
 	}
+	*/
+	public static void createDummyPeople()
+	{
+		int numppl = 10;
+		
+		Random rand = new Random();
+		
+		for(Entry<String, Room> roomSet : operatingRooms.entrySet())
+		{
+			Room room = roomSet.getValue();
+			for(Entry<String, Operation> opEntry : room.operations.entrySet())
+			{
+				Operation op = opEntry.getValue();
+				for(int y = 0; y < numppl; y++)
+				{
+					Person p = new Person("Test person" + Integer.toString(y), 
+										new Role(Role.ROLE_STRING_ARRAY[rand.nextInt(Role.ROLE_STRING_ARRAY.length)]),
+										Integer.toString(rand.nextInt(9999)));
+					p.devices.add(new PagerReciever(Integer.toString(rand.nextInt(9999))));
+					
+					op.addPerson(p);
+				}
+			}
+		}
+			
+		for(int i = 0; i < 1000; i++)
+		{
+			
+		}
+	}
 	public static void processRoomTimestamps()
 	{
 		// no need if it's empty
@@ -309,35 +339,42 @@ public class OrbitStamps
 			{
 				Room room = roomEntry.getValue();
 				
-				
 				// if we have any new stamps here
-				if(room.newStamps.size() > 0)
+				for(Entry<String, Operation> entry : room.operations.entrySet())
 				{
-					for(Person person : room.getPeople())
+					Operation op = entry.getValue();
+					for(Timestamp ts : op.stamps)
 					{
-						// no need if no devices bound to this person
-						if(person.devices != null && person.devices.size() > 0) 
+						// if the stamp already is parsed, go next
+						if(ts.parsed)
+							continue;
+						
+						for(Person person : op.getPeople())
 						{
-							for(FilterMessage fm : filterManager.filters)
+							// no need if no devices bound to this person
+							if(person.devices != null && person.devices.size() > 0) 
 							{
-								// if the room, person, and timestamp is ok, its a match
-								if(fm.match(room, person))
+								for(FilterMessage fm : filterManager.filters)
 								{
-									
-									msgQueue.add(new MsgQueueItem(room, person, fm.msg, CommunicationHistory.HISTORY_TYPE_AUTO));
-									
-									log(OrbitStamps.LOG_NOTICE, "!!! Match found " + person.name + " role= " + person.role.getRole() + " room= " + room.roomID);
-								}
-								else
-								{
-									log(OrbitStamps.LOG_NOTICE, "NO MATCH " + person.name + " role= " + person.role.getRole() + " room= " + room.roomID);
+									// if the room, person, and timestamp is ok, its a match
+									if(fm.match(room, person, ts))
+									{						
+										msgQueue.add(new MsgQueueItem(room, person, fm.msg, CommunicationHistory.HISTORY_TYPE_AUTO));
+										
+										log(OrbitStamps.LOG_NOTICE, "!!! Match found " + person.name + " role= " + person.role.getRole() + " room= " + room.roomID);
+									}
+									else
+									{
+										log(OrbitStamps.LOG_NOTICE, "NO MATCH " + person.name + " role= " + person.role.getRole() + " room= " + room.roomID);
+									}
 								}
 							}
 						}
+						
+						// mark the timestamp as parsed
+						ts.parsed = true;
+						
 					}
-					
-					// move all the processed stuff to history.
-					room.newStamps.clear();
 				}
 			}
 			

@@ -37,6 +37,7 @@ public class MsgQueue extends Thread
     		// parse dynamic elements
     		item.parseBody();
     		int status = MessageChannel.MSG_STATUS_FAILED;
+    		
     		for(MessageChannel channel : OrbitStamps.channels)
     		{
     			MessageReciever useDevice = item.person.getDeviceCompatibleWith(channel);
@@ -55,7 +56,7 @@ public class MsgQueue extends Thread
 					item.person.ID, status));
     		
     		
-    		OrbitStamps.log(OrbitStamps.LOG_NOTICE, "Sending Message ... " + item.msg.getBody());
+    		OrbitStamps.log(OrbitStamps.LOG_NOTICE, "Sending Message ... to= " + item.person.role.getRole() + " name=" + item.person.name + " body= " + item.msg.getBody());
     		item = null;
 
     		}

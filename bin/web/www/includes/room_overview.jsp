@@ -32,12 +32,109 @@ $(document).ready(function()
 			var newMsgRecv = new Array();
 			var msgHistory = new Array();
 			
+			var updateOperationSelect = function(operationID)
+			{
+				var container = $("#operations");
+				container.html("");
+				$.post("includes/functions/getRoomOperations.jsp", {room: <%= roomID %>},
+						   function(data) 
+						   {
+							var obj = $.parseJSON(data);
+							console.log(obj);
+							
+							
+
+							
+							obj.operations.sort(function(a,b)
+								{
+									
+									return new Date(a.op_start).getTime() - new Date(b.op_start).getTime()
+								});
+							
+							var currentDate = new Date();
+							var leastDiff = currentDate.getTime();
+							var leastSelector = null;
+							$.each(obj.operations, function(k, v)
+							{
+								var diff = Math.abs(currentDate.getTime() - new Date(v.op_start).getTime()); 
+						
+								var op = $("<option value='"+v.op_id+"'>"+v.op_start + " - "+ v.op_desc +"</option>");
+								if(diff < leastDiff)
+								{
+									leastSelector = op;
+									leastDiff = diff;
+								}
+								container.append(op);	
+								console.log(v.name);
+							});
+							
+							console.log(leastSelector);
+							if(leastSelector != null)
+							{
+								leastSelector.attr('selected', 'selected');
+								container.change();
+							}
+							$('#operations').selectmenu({ 
+								width: 300,
+								format: function(text){
+									var newText = text;
+									//array of find replaces
+									var findreps = [
+													{find:/^([^\-]+) \- /g, rep: '<span class="ui-selectmenu-item-header">$1</span>'},
+													{find:/([^\|><]+) \| /g, rep: '<span class="ui-selectmenu-item-content">$1</span>'},
+													{find:/([^\|><\(\)]+) (\()/g, rep: '<span class="ui-selectmenu-item-content">$1</span>$2'},
+													{find:/([^\|><\(\)]+)$/g, rep: '<span class="ui-selectmenu-item-content">$1</span>'},
+													{find:/(\([^\|><]+\))$/g, rep: '<span class="ui-selectmenu-item-footer">$1</span>'}
+												];
+									
+									for(var i in findreps){
+										newText = newText.replace(findreps[i].find, findreps[i].rep);
+									}
+									return newText;
+								}
+							});
+
+							
+						   });		
+			}
+			updateOperationSelect();
+
 			var drawTimeOperationOverview = function(operationID)
 			{
+				var container = $("#timeline");
+				container.html("");
 				$.post("includes/functions/getOperationTimestamps.jsp", {opID: operationID, room: <%= roomID %>},
 						   function(data) 
 						   {
+							var obj = $.parseJSON(data);
+							console.log(obj);
+							obj.stamps.sort(function(a,b){return a.order-b.order});
+							$.each(obj.stamps, function(k, v)
+							{
+								var stamp = $("<td class='timeline-cell' style='background-color: #F0A;'><a title='tidpunkt' href='#'>"+v.order+": "+v.name+"</a></td>");
+								container.append(stamp);	
+								console.log(v.name);
+							});
+
+							
+						   });	
+			
+				var personalContainer = $("#personal-table");
+				
+				$.post("includes/functions/getOperationPersonal.jsp", {opID: operationID, room: <%= roomID %>},
+						   function(data) 
+						   {
+							$("#personal-table").find("tr.row.clickable").remove();
 							console.log(data);
+							var obj = $.parseJSON(data);
+							console.log(obj);
+							//obj.stamps.sort(function(a,b){return a.order-b.order});
+							$.each(obj.personal, function(k, v)
+							{
+								var personal = $("<tr alt='Klicka för att skicka ett meddelande' title='Klicka för att skicka ett meddelande' class='row clickable' id='row_"+v.id+"'><td class='cell personID'>"+v.id+"</td><td class='cell namn'>"+v.namn+"</td><td class='cell roll'>"+v.roll+"</td></tr>");
+								
+								personalContainer.append(personal);
+							});	
 						   });	
 			}
 			$("#operations").change(function()
@@ -134,7 +231,7 @@ $(document).ready(function()
 			/*
 			ADD NEW RECIEVER TO MESSAGE, CREATE MESSAGE
 			*/
-			$("div.room-container tr.row").click(function()
+			$("div.room-container tr.row").live("click", function()
 			{
 				var newMsg = $("#create-message-container");	
 				
@@ -260,7 +357,7 @@ $(document).ready(function()
 					});
 			
 			/* personal pa sal hovering */
-			$("div.room-container tr.row").hover(function()
+			$("div.room-container tr.row").live("mouseover", function()
 			{
 				var pID = $(this).children("td.cell.personID").text();
 				
@@ -272,7 +369,8 @@ $(document).ready(function()
 					if(that.text()==pID)
 						that.parent().addClass("second-hovering");
 				});
-			},function(){
+			});
+			$("div.room-container tr.row").live("mouseout",function(){
 				$(this).removeClass("hovering");
 				$("#history tr.row").removeClass("second-hovering");
 			});
@@ -311,11 +409,7 @@ else
 		<div id="timeline-container">
 		<div class="operation-timeline" style="display: none;">
 			<table class="timeline-table">
-			<tr class="timeline-row">
-			<td class="timeline-cell" style="background-color: #F0A;"><a title="tidpunkt" href="#">PREOP</a></td>
-			<td class="timeline-cell" style="background-color: #FAA;"><a title="tidpunkt" href="#">RINGT AVD</a></td>
-			<td class="timeline-cell" style="background-color: #3AA;"><a title="tidpunkt" href="#">ANLÄNT OPSAL</a></td>
-			<td class="timeline-cell" style="background-color: #CA0;"><a title="tidpunkt" href="#">PATIENT START</a></td>
+			<tr class="timeline-row" id="timeline">
 			<td class="timeline-cell last-element" style="width: 50%"></td>
 			</tr>
 			</table>
@@ -325,15 +419,6 @@ else
 		</div>
 		<div id="content">
 		<div>
-		<form action="">
-		<select name="operations" id="operations">
-		<% for(Entry<String, Operation> opEntry : room.operations.entrySet()) { 
-		Operation op = opEntry.getValue();
-		%>
-		<option value="<%= op.op_id %>"><%= op.op_id %></option>
-		<% } %>
-		</select>
-		</form>
 		</div>		
 		<h1>Sal <%= room.roomName %></h1>
 		
@@ -384,7 +469,7 @@ else
 		<div class="table-container">
 		<div class="room-container" style="width: 40%;">
 		<h2>Personal på sal</h2>
-		<table class="table">
+		<table id="personal-table" class="table">
 		
 			<tr class="header-row">
 			<td class="header">HSAID</td>
@@ -392,9 +477,9 @@ else
 			<td class="header">Roll</td>
 			</tr>
 		<%
-		int counter = 0;
-		for(Person p : room.getPeople())
-		{
+			int counter = 0;
+				for(Person p : room.getPersistantPersons())
+				{
 		%>
 			<tr alt="Klicka för att skicka ett meddelande" title="Klicka för att skicka ett meddelande" class="row clickable" id="row_<%= p.ID %>">
 			<td class="cell personID"><% 

@@ -9,7 +9,7 @@ public class DatabasePoll extends Thread
 {
 
 	public boolean isActive = false;
-	public long pollInterval = 1000;
+	public long pollInterval = 20000;
 	private DataMapper mapper;
 	static public ArrayList<Timestamp> newTimestamps;
 	
@@ -18,11 +18,13 @@ public class DatabasePoll extends Thread
 		mapper = dm;
 		isActive = true;
 	}
-	public boolean debugConnect()
+	public void updateData(int which)
 	{
-		boolean val =  mapper.connect();
-		mapper.disconnect();
-		return val;
+		if(mapper.connect())
+		{
+			mapper.mapToModel(which);
+			mapper.disconnect();
+		}
 	}
     public void run() {
     	
@@ -30,8 +32,9 @@ public class DatabasePoll extends Thread
     	{
         	//OrbitStamps.log(OrbitStamps.LOG_NOTICE, "Polling database ... ");
         	//OrbitStamps.log(OrbitStamps.LOG_NOTICE, "Adding new timestamps to room ... ");
-    		mapper.mapToModel(null);
+    		//updateData(DataMapper.DATATYPE_STAMPS);
         	OrbitStamps.processRoomTimestamps();
+        	
         	
             synchronized (this) 
             {

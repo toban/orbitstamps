@@ -8,8 +8,8 @@
 <%@ page import="service.MsgQueueItem" %>
 <%@ page import="service.model.Room" %>
 
-<% 
-/*
+<%
+	/*
 room = Integer.parseInt(request.getParameter("room"));
 pageID = Integer.parseInt(request.getParameter("number"));
 message = Integer.parseInt(request.getParameter("page"));
@@ -20,14 +20,14 @@ String callback = request.getParameter("callback");
 String strMessage = request.getParameter("msg");
 
 Message msg = new Message(strMessage, 
-					Urgency.LEVEL_IMPORTANT, 
-					AscomPagerMessageChannel.MESSAGE_BEEP_SIGNAL);
+			Urgency.LEVEL_IMPORTANT, 
+			AscomPagerMessageChannel.MESSAGE_BEEP_SIGNAL);
 
 Room room = OrbitStamps.operatingRooms.get(roomID);
 
 for(String id : recv)
 {
-	Person p = room.getPerson(id);
+	Person p = room.getPersistantPerson(id);
 	out.print(p);
 	if(p==null)
 		continue;
@@ -36,15 +36,14 @@ for(String id : recv)
 		PagerReciever pr = (PagerReciever) p.getDeviceCompatibleWith(OrbitStamps.DEFAULT_CHANNEL);
 		if(pr==null)
 		{
-			continue;
+	continue;
 		}
 		else
 		{
-			OrbitStamps.msgQueue.add(new MsgQueueItem(room, p, msg, CommunicationHistory.HISTORY_TYPE_MANUAL));
+	OrbitStamps.msgQueue.add(new MsgQueueItem(room, p, msg, CommunicationHistory.HISTORY_TYPE_MANUAL));
 		}
 		
 	}
 }
-
 %>
 

@@ -30,9 +30,9 @@ public class FilterMessage
 		
 	}
 	// check if the room's timestamp and role matches 
-	public boolean match(Room r, Person p)
+	public boolean match(Room r, Person p, Timestamp ts)
 	{
-		if(r.newStamps.contains(stamp))
+		if(ts.stamp.equals(stamp.stamp))
 		{
 			if(rooms.contains("all") || rooms.contains(r.roomID))
 			{

@@ -11,37 +11,35 @@ import service.communication.CommunicationHistory;
 public class Room 
 {
 	public String roomID, roomName, locationName, locationID;
-	private ArrayList<Person> people;
+	private ArrayList<Person> persistantPersonal;
 	public HashMap<String,Operation> operations;
-	public ArrayList<Timestamp> newStamps;
 	public LinkedList<CommunicationHistory> messageHistory;
 	
 	public Room(String roomID)
 	{
-		this.newStamps = new ArrayList<Timestamp>();
 		this.operations = new HashMap<String, Operation>();
 		this.messageHistory = new LinkedList<CommunicationHistory>();
-		this.setPeople(new ArrayList<Person>());
+		this.setPersistantPersons(new ArrayList<Person>());
 		this.roomID = roomID;
 	}
-	public Person getPerson(String id)
+	public Person getPersistantPerson(String id)
 	{
-		for(Person p : people)
+		for(Person p : persistantPersonal)
 		{ 
 			if(p.ID.equals(id))
 				return p;
 		}
 			return null;
 	}
-	public void deletePerson(Person p)
+	public void deletePersistantPerson(Person p)
 	{
-			people.remove(p);
+			persistantPersonal.remove(p);
 	}
-	public boolean addPerson(Person p)
+	public boolean addPersistantPerson(Person p)
 	{
-		if(!getPeople().contains(p))
+		if(!getPersistantPersons().contains(p))
 		{
-			getPeople().add(p);
+			getPersistantPersons().add(p);
 			return true;
 		}
 		else
@@ -63,10 +61,10 @@ public class Room
 		}
 			
 	}
-	public final ArrayList<Person> getPeople() {
-		return people;
+	public final ArrayList<Person> getPersistantPersons() {
+		return persistantPersonal;
 	}
-	public void setPeople(ArrayList<Person> people) {
-		this.people = people;
+	public void setPersistantPersons(ArrayList<Person> people) {
+		this.persistantPersonal = people;
 	}
 }

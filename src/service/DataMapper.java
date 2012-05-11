@@ -2,7 +2,11 @@ package service;
 
 public abstract class DataMapper 
 {
-	public abstract void mapToModel(Object obj);
+	
+	public final static int DATATYPE_ALL = 0;
+	public final static int DATATYPE_STAMPS = 1;
+	
+	public abstract void mapToModel(int which);
 	
 	public abstract boolean connect();
 	public abstract boolean disconnect();

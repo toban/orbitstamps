@@ -97,9 +97,9 @@ else
 			<td class="header">Ta bort</td>
 			</tr>
 		<%
-		int counter = 0;
-		for(Person p : room.getPeople())
-		{
+			int counter = 0;
+				for(Person p : room.getPersistantPersons())
+				{
 			if(p instanceof FunctionalPerson)
 			{
 		%>
