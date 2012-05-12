@@ -19,13 +19,15 @@ catch(Exception e)
 	<li class="li-nav"><a class="nav" href="?page=1">Välj sal</a></li>
 	<% if(pageID == 2) { %>
 	<li class="li-nav"><a class="nav" href="?page=3&amp;room=<%= roomID %>" id="add-room-function">Hantera funktion på sal</a></li>
-	<li class="li-select"><form action=""><select name="operations" id="operations"></select></form></li>
+	<li class="li-select"><select name="operations" id="operations"></select></li>
 	<% } %>
 	<% if(pageID == 3) { %>
 	<li class="li-nav"><a class="nav" href="?page=2&amp;room=<%= roomID %>">Tillbaka till sal</a></li>
 	<% } %>
 </ul>
+<!-- 
 <div id="search">Sök<input type="text" name="search" id="search-field" /></div>
+ -->
 </div>
 <%
 

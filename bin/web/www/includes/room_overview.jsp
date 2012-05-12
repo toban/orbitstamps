@@ -40,7 +40,7 @@ $(document).ready(function()
 						   function(data) 
 						   {
 							var obj = $.parseJSON(data);
-							console.log(obj);
+							////console.log(obj);
 							
 							
 
@@ -65,16 +65,17 @@ $(document).ready(function()
 									leastDiff = diff;
 								}
 								container.append(op);	
-								console.log(v.name);
+								////console.log(v.name);
 							});
 							
-							console.log(leastSelector);
+							////console.log(leastSelector);
 							if(leastSelector != null)
 							{
 								leastSelector.attr('selected', 'selected');
 								container.change();
 							}
-							$('#operations').selectmenu({ 
+							$('#operations').selectmenu({
+								theme: 'b',
 								width: 300,
 								format: function(text){
 									var newText = text;
@@ -107,13 +108,13 @@ $(document).ready(function()
 						   function(data) 
 						   {
 							var obj = $.parseJSON(data);
-							console.log(obj);
+							////console.log(obj);
 							obj.stamps.sort(function(a,b){return a.order-b.order});
 							$.each(obj.stamps, function(k, v)
 							{
 								var stamp = $("<td class='timeline-cell' style='background-color: #F0A;'><a title='tidpunkt' href='#'>"+v.order+": "+v.name+"</a></td>");
 								container.append(stamp);	
-								console.log(v.name);
+								////console.log(v.name);
 							});
 
 							
@@ -125,9 +126,9 @@ $(document).ready(function()
 						   function(data) 
 						   {
 							$("#personal-table").find("tr.row.clickable").remove();
-							console.log(data);
+							////console.log(data);
 							var obj = $.parseJSON(data);
-							console.log(obj);
+							//console.log(obj);
 							//obj.stamps.sort(function(a,b){return a.order-b.order});
 							$.each(obj.personal, function(k, v)
 							{
@@ -194,15 +195,16 @@ $(document).ready(function()
 			$("#new-msg-submit").click(function()
 			{
 				var message = $("#msg").val();
-;
 				if(newMsgRecv.length > 0)
 				{
 				$("#msg-input-container").slideToggle();
 				$("#msg-sending-info").show()	
 				var callback = $("#msg-callback").val();
+				var operation = $("#operations option:selected").val();
 				$.post("includes/functions/sendMessage.jsp", {'recv[]': newMsgRecv,
 																room: <%= roomID %>,
 																callback: callback,
+																operation: operation,
 																msg: message},
 						   function(data) // message sent callback
 						   {
@@ -298,34 +300,46 @@ $(document).ready(function()
 				$("#char-counter").text(charLength)
 			};
 			
-			var updateCallback = function(obj) {
+			var updateCallback = function() {
 				
-				var pos = $.inArray("]", $("#msg").val());
+				var msg = $("#msg");
+				
+				var cb = $("#msg-callback");
+				var pos = -1;
+				var valueNow = msg.val();
+				pos = $.inArray("]", valueNow.split(""));
+				
 				if(pos != -1)
-					$("#msg").val($("#msg").val().substring(pos+2,120));
+				{
+					msg.val(valueNow.substring(pos+2,120));
+				}
 				
 				if($("#msg-callback").val().length > 0)
-					var text = "["+$.trim($(obj).val())+"] " + $("#msg").val();
+				{
+				var text = "["+$.trim($("#msg-callback").val())+"] " + $("#msg").val();
+				
+				}
 				else
+				{
 					var text = $("#msg").val();
-				
-				
-				
-				$("#msg").val(text)
+				}
+				msg.val(text);	
 				updateCharCount();
+				
+
 			}
 			/* callback events*/
 			$("#msg-callback").change(function(e)
 				{
-					updateCallback(this);	
+					//updateCallback();	
 				});
 			$("#msg-callback").keyup(function(e)
 				{
-					updateCallback(this);	
+					updateCallback();	
 				});
 			$("#msg-callback").focus(function(e)
 					{
-						updateCallback(this);	
+						updateCallback();	
 					});
 			/* msg events */
 			$("#msg").keydown(function()
@@ -336,8 +350,8 @@ $(document).ready(function()
 					});
 			$("#msg").change(function()
 					{
-						updateCharCount();
-						updateCallback($("#msg-callback"));	
+						//updateCharCount();
+						//updateCallback($("#msg-callback"));	
 					});
 			
 			$("#msg-template").change(function()
@@ -346,7 +360,7 @@ $(document).ready(function()
 						$("#msg").val(val);
 						
 						updateCharCount();
-						updateCallback($("#msg-callback"));
+						updateCallback();
 						
 					});
 			
@@ -433,7 +447,7 @@ else
 			</div>
 			<div class="new-msg-field" style="width: 40%;">
 			<div style="display: block;">
-			<div style="display: inline-block;">
+			<div style="float: left;">
 			<label for="msg-template">Meddelande-mall</label>
 				<select name="msg-template" id="msg-template">
 					<option value="" class="msg-template-item">* Nytt meddelande</option>
@@ -442,22 +456,24 @@ else
 					<% } %>
 				</select>
 				</div>
-				<div style="display: inline-block;">
+				<div style="float: left; margin-left: 20px;">
 				<label for="msg-callback">Avsändare</label>
-				<input type="text" name="msg-callback" id="msg-callback">
+				<input type="text" name="msg-callback" id="msg-callback" />
 				</div>
+				<div class='clear'>&nbsp;</div>
 			</div>
 			<div>
 			<label for="sender">Meddelande</label>
 			<textarea name="msg" id="msg" style="width: 100%;" rows="3"></textarea>
 			</div>
-			<em>Du har <span id="char-counter">120</span> bokstäver kvar.</div></em>
+			<em>Du har <span id="char-counter">120</span> bokstäver kvar.</em></div>
 			<div class="new-msg-field" style="width: 40%;">
 			<label for="recv-container">Mottagare</label>
 			<div id="input-recv-error" style="display: none; color: #F00;">Mottagare saknas!</div>
 			<div id="recv-container"></div>
 			<!--  <input type="hidden" name="recv" id="recv" />  -->
 			</div>
+			<div class='clear'>&nbsp;</div>
 	
 			<div style="float: right; position: absolute; bottom: 10px; right: 10px;">
 			<input type="submit" id="new-msg-submit" value="Skicka" />
@@ -468,7 +484,7 @@ else
 		
 		<div class="table-container">
 		<div class="room-container" style="width: 40%;">
-		<h2>Personal på sal</h2>
+		<div class="header-container"><h2>Personal på sal</h2></div>
 		<table id="personal-table" class="table">
 		
 			<tr class="header-row">
@@ -499,7 +515,8 @@ else
 		</div> <!-- end room -->
 		
 		<div id="history" style="width: 58%;">
-		<h2>Meddelande historik</h2><span id="history-update"></span>
+		<div class="header-container">
+		<h2>Meddelande historik</h2><span id="history-update"></span></div>
 		<div id="history-table-container">
 		<!-- history post start -->
 		<table class="table">

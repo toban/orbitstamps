@@ -38,7 +38,9 @@ body
 .room-container
 {
 	width: auto;
-	display: inline-block;
+	float: left;
+	margin-right: 20px;
+	display: block;
 }
 #menu
 {
@@ -67,7 +69,7 @@ body
 {
 	height: 35px;
 	margin-left: 15px;
-	display: inline-block;
+	display: inline;
 	
 }
 label
@@ -91,9 +93,15 @@ label
 	display: inline-block;
 	margin-left: 20px;
 }
+.clear
+{
+	clear: both;
+	font-size: 1px;
+}
 .new-msg-field
 {
-	display: inline-block;
+	display: block;
+	float: left;
 	vertical-align: top;
 	margin-left: 10px;
 	border: 2px solid #EEE;
@@ -127,7 +135,8 @@ label
 }
 #history
 {
-	display: inline-block;
+	display: block;
+	float: left;
 	vertical-align: top;
 }
 .hovering
@@ -350,11 +359,14 @@ label.error { float: none; color: red; vertical-align: top; }
 	font-size: 10px;
 	margin-left: 20px;
 	font-style: italic;
-	
 }
 h2
 {
-	display: inline-block;
+	display: inline;
+}
+.header-container
+{
+	margin: 10px 0 10px 0;
 }
 .table
 {

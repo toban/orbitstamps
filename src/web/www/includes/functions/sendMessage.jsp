@@ -7,6 +7,7 @@
 <%@ page import="service.model.Person" %>
 <%@ page import="service.MsgQueueItem" %>
 <%@ page import="service.model.Room" %>
+<%@ page import="service.model.Operation" %>
 
 <%
 	/*
@@ -16,6 +17,7 @@ message = Integer.parseInt(request.getParameter("page"));
 */
 String[] recv = request.getParameterValues("recv[]");
 String roomID = request.getParameter("room");
+String opID = request.getParameter("operation");
 String callback = request.getParameter("callback");
 String strMessage = request.getParameter("msg");
 
@@ -24,23 +26,25 @@ Message msg = new Message(strMessage,
 			AscomPagerMessageChannel.MESSAGE_BEEP_SIGNAL);
 
 Room room = OrbitStamps.operatingRooms.get(roomID);
+Operation op = room.operations.get(opID);
 
 for(String id : recv)
 {
-	Person p = room.getPersistantPerson(id);
-	out.print(p);
+	Person p = op.getPerson(id);
+	
 	if(p==null)
 		continue;
 	else
 	{
 		PagerReciever pr = (PagerReciever) p.getDeviceCompatibleWith(OrbitStamps.DEFAULT_CHANNEL);
+		
 		if(pr==null)
 		{
-	continue;
+			continue;
 		}
 		else
 		{
-	OrbitStamps.msgQueue.add(new MsgQueueItem(room, p, msg, CommunicationHistory.HISTORY_TYPE_MANUAL));
+			OrbitStamps.msgQueue.add(new MsgQueueItem(room, p, msg, CommunicationHistory.HISTORY_TYPE_MANUAL));
 		}
 		
 	}

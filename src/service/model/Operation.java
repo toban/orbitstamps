@@ -29,6 +29,15 @@ public class Operation
 		this.opkort_id = opkort_id;
 		this.op_id = op_id;
 	}
+	public Person getPerson(String id)
+	{
+		for(Person p : people)
+		{ 
+			if(p.ID.equals(id))
+				return p;
+		}
+			return null;
+	}
 	public void deletePerson(Person p)
 	{
 			people.remove(p);
